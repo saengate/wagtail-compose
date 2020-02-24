@@ -1,0 +1,4 @@
+#!/bin/bash
+activate () {
+    source /opt/venv/bin/activate
+}

@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  redis:
+    image: redis:latest
+
+  web:
+    build: .
+    depends_on:
+      - redis
+    volumes:
+      - ./project:/var/www/project
+      - ./scripts:/opt/scripts
+    ports:
+      - 80:80
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    command: bash /opt/scripts/run.sh
+    tty: true
