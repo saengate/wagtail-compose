@@ -7,10 +7,10 @@ RUN pip3 install --upgrade pip
 WORKDIR /tmp
 
 COPY project/requirements.txt ./
-COPY scripts/install.sh ./
+COPY scripts/config.sh ./
 
 RUN mkdir -p /webapps
-RUN bash install.sh
+RUN bash config.sh
 # RUN pip3 install --no-cache-dir -r requirements.txt
 
 RUN mkdir -p /var/log/project

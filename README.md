@@ -9,16 +9,28 @@ Imagen de Django 2.2.10 con Nginx
 
 ## Descripción
 
-En desarrollo
+Crear una imagen de docker con django - nginx incluyendo aplicaciones y librerias de uso común con ejemplos.
 
 ### ¿Cómo instalar?
+Requiere tener docker instalado.
+El archivo install.sh realiza la instalación básica de docker y ejecuta las lineas para llamar al contenedor.
+
+```bash
+bash install.sh
+```
+
+Si ya posee docker instalado puede ejecutar la siguiente instrucción:
+```bash
+sudo docker run -it --rm --name djangofull saengate/djfullapp
+```
+
+## Testing
 
 
-### Paso a producción
-
-## Requisitos 
-* Docker
-* Docker-composer
+## Requisitos
+* OS linux
+* Docker (Se instalación con install.sh)
+* Docker-composer (Se instalación con install.sh)
 
 ## Dependencias
 
@@ -27,3 +39,6 @@ En desarrollo
 
 
 ## Desarrollo
+
+
+## Paso a producción
