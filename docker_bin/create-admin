@@ -1,0 +1,10 @@
+#!/bin/bash
+
+activate () {
+    source /opt/venv/bin/activate;
+    cd /var/www/project;
+    ./manage.py makemigrations;
+    ./manage.py migrate;
+    ./manage.py collectstatic;
+    echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@admin.com', 'admin')" | ./manage.py shell;
+}

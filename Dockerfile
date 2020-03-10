@@ -1,7 +1,7 @@
 FROM nginx:latest
 
 RUN apt-get update
-RUN apt-get install -y python3-pip supervisor python3-venv
+RUN apt-get install -y python3-pip supervisor python3-venv libpq-dev python3-dev
 RUN pip3 install --upgrade pip
 
 WORKDIR /tmp
@@ -11,14 +11,19 @@ COPY scripts/config.sh ./
 
 RUN mkdir -p /webapps
 RUN bash config.sh
-# RUN pip3 install --no-cache-dir -r requirements.txt
 
-RUN mkdir -p /var/log/project
-RUN touch /var/log/project/console.log
+ENV AIRFLOW_HOME=/usr/local/airflow
+COPY ./airflow/airflow.cfg /usr/local/airflow/airflow.cfg
+RUN mkdir -p /var/log/airflow
 
-RUN mkdir -p /var/www/project/conf
+ENV log=/var/log/project
+ENV project=/var/www/project
 
-WORKDIR /var/www/project/
+RUN mkdir -p $log
+RUN touch $log/console.log
+RUN mkdir -p $project/conf
+
+WORKDIR $project
 
 COPY conf_server/project_start /usr/local/bin/
 COPY conf_server/project_websocket_start /usr/local/bin/
@@ -33,7 +38,10 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 # LOGS command bin
 COPY docker_bin/* /usr/local/bin/
+RUN chmod +x /usr/local/bin/*
 
-EXPOSE 80
+RUN ln -s /var/www/project/airflow/dags /usr/local/airflow/
+
+EXPOSE 80 5000 5555
 
 CMD ["/bin/bash"]

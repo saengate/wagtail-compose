@@ -2,16 +2,33 @@ version: '3.7'
 services:
   redis:
     image: redis:latest
+    container_name: djangofull-redis
+
+  db:
+    image: postgres:12.2
+    container_name: djangofull-db
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=userdb
+      - POSTGRES_DB=djangofulldb
+    ports:
+      - 5432:5432
 
   web:
     build: .
+    container_name: djangofull
+    restart: always
     depends_on:
       - redis
+      - db
     volumes:
       - ./project:/var/www/project
       - ./scripts:/opt/scripts
     ports:
       - 80:80
+      - 5000:8080
+      - 5050:5555
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80

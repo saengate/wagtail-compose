@@ -108,3 +108,4 @@ venv.bak/
 /README.md~
 .vscode/
 .idea/
+.DS_Store
