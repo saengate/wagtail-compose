@@ -28,6 +28,12 @@ services:
       - 7474:7474
       - 7687:7687
 
+  vue:
+    build: ./vue
+    container_name: djangofull-vue
+    ports:
+      - 80:80
+
   web:
     build: .
     container_name: djangofull
@@ -39,7 +45,7 @@ services:
       - ./project:/var/www/project
       - ./scripts:/opt/scripts
     ports:
-      - 80:80
+      - 8000:80
       - 5000:8080
       - 5050:5555
     environment:
