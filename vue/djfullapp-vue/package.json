@@ -1,0 +1,21 @@
+{
+  "name": "djfullapp-vue",
+  "version": "",
+  "description": "Template",
+  "main": "src/djfullapp.vue",
+  "scripts": {
+    "test": " "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saengate/djfullapp.git"
+  },
+  "author": "saengate",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/saengate/djfullapp/issues"
+  },
+  "homepage": "https://github.com/saengate/djfullapp",
+  "dependencies": {
+  }
+}

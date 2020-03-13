@@ -15,6 +15,25 @@ services:
     ports:
       - 5432:5432
 
+  neo4j:
+    image: neo4j:4.0.1
+    container_name: djangofull-neo4j
+    restart: always
+    volumes:
+      - ./project/neo4j:/data  # base de datos persistente
+    environment:
+      - NEO4J_AUTH=none
+      - SECURE_FILE_PERMISSIONS=yes  # verificación de permisos de archivo estricta
+    ports:
+      - 7474:7474
+      - 7687:7687
+
+  vue:
+    build: ./vue
+    container_name: djangofull-vue
+    ports:
+      - 80:80
+
   web:
     build: .
     container_name: djangofull
@@ -26,7 +45,7 @@ services:
       - ./project:/var/www/project
       - ./scripts:/opt/scripts
     ports:
-      - 80:80
+      - 8000:80
       - 5000:8080
       - 5050:5555
     environment:

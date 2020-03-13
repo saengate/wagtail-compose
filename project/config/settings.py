@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'channels',
+    'django_neomodel',
     'ses',
 ]
 
@@ -86,6 +87,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 } 
 """
+# https://pypi.org/project/django_neomodel/
+
+NEOMODEL_NEO4J_BOLT_URL = 'bolt://neo4j:neo4j@djangofull-neo4j:7687'
+NEOMODEL_SIGNALS = True
+NEOMODEL_FORCE_TIMEZONE = False
+NEOMODEL_ENCRYPTED_CONNECTION = True
+NEOMODEL_MAX_POOL_SIZE = 50
 
 DATABASES = {
     'default': {

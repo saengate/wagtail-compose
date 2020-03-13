@@ -19,3 +19,4 @@ channels_redis==2.4.1
 psycopg2==2.8.4
 celery==4.4.1
 apache-airflow[postgres,celery,redis,crypto]==1.10.9
+django_neomodel==0.0.4
