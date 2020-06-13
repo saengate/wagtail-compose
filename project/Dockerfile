@@ -21,7 +21,6 @@ RUN chmod og-wx ~/.ssh/authorized_keys
 
 WORKDIR /tmp
 
-COPY scripts/entrypoint.sh /tmp
 COPY ansible /root/ansible
 COPY requirements.txt ./
 COPY scripts/config.sh ./
@@ -63,8 +62,8 @@ RUN chmod +x /usr/local/bin/*
 
 RUN ln -s /var/www/project/airflow/dags /usr/local/airflow/
 
-WORKDIR /tmp
+WORKDIR /var/www/project
 
 EXPOSE 22 80 5000 5555
 
-ENTRYPOINT ["bash", "entrypoint.sh"]
+ENTRYPOINT ["bash", "scripts/entrypoint.sh"]
