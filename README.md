@@ -5,15 +5,15 @@
 
 # Django - Nginx
 
-Imagen de Django 2.2.10 con Nginx
+Imagen de Django 2.2.10/VueJs con Nginx (Pensado para Ubuntu/Debian).
 
 ## Descripción
 
 Crear una imagen de docker con django - nginx incluyendo aplicaciones y librerias de uso común con ejemplos.
 
 ### ¿Cómo instalar?
-Requiere tener docker instalado.
-El archivo install.sh realiza la instalación básica de docker y ejecuta las lineas para llamar al contenedor.
+
+El archivo install.sh realiza la instalación básica de `docker` y ejecuta las lineas para llamar al contenedor.
 
 ```bash
 bash install.sh
@@ -28,15 +28,22 @@ sudo docker run -it --rm --name djangofull saengate/djfullapp
 
 
 ## Requisitos
-* OS linux
-* Docker (Se instalación con install.sh)
-* Docker-composer (Se instalación con install.sh)
+* OS linux (Ubuntu/Debian)
+* Docker (Se instala con install.sh)
+* Docker-composer (Se instala con install.sh)
 
 ## Dependencias
 
 
 ## Notas
 
+Para cambiar la clave del vault en Ansible
+```sh
+ansible-vault encrypt ansible/group_vars/develop/vault.yml
+ansible-vault decrypt ansible/group_vars/develop/vault.yml
+ansible-vault rekey ansible/group_vars/develop/vault.yml
+ansible-vault view ansible/group_vars/develop/vault.yml
+```
 
 ## Desarrollo
 
