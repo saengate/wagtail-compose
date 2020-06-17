@@ -1,15 +1,4 @@
 ---
-user_web2py: w2p_user
-
-db_user_mysql: FocusWork
-db: W2PFocusWork
-#scheduler_db: FocusWorkScheduler
-
-apache_config: default.conf.j2
-
+user: user
 local_user: ansible
-default_dir_web2py: /var/www/web2py
-default_app_web2py: focuswork
-default_dir_virtualenv: /var/www/virtualenv
-git_clone: git@bitbucket.org:saulgalan/focuswork.git
 ...

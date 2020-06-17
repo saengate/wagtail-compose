@@ -1,8 +1,5 @@
 FROM nginx:stable
 
-# RUN apt-get update
-# RUN apt-get install -y software-properties-common gpg-agent
-# RUN apt-add-repository --yes --update ppa:ansible/ansible
 RUN apt-get update
 RUN apt-get install -y python3-pip supervisor python3-venv libpq-dev python3-dev openssh-server openssh-client curl
 RUN pip3 install --upgrade pip

@@ -1,0 +1,4 @@
+---
+branch: master
+postgres_password: "{{ vault_root_pass }}"
+...

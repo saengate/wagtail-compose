@@ -1,7 +1,4 @@
 ---
 branch: develop
-
-web2py_password: "{{ vault_web2py_pass }}"
-mysql_password: "{{ vault_mysql_root_pass }}"
-mysql_user_password: "{{ vault_mysql_user_pass }}"
+user_password: "{{ vault_user_pass }}"
 ...

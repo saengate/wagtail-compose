@@ -3,7 +3,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/saengate/djfullapp)](https://github.com/saengate/djfullapp/graphs/contributors)
 [![Build Status](https://travis-ci.org/saengate/djfullapp.svg?branch=master)](https://travis-ci.org/saengate/djfullapp)
 
-# Django - Nginx
+# Django - Postgresql-11 - Nginx
 
 Imagen de Django 2.2.10/VueJs con Nginx (Pensado para Ubuntu/Debian).
 
@@ -14,26 +14,22 @@ Crear una imagen de docker con django - nginx incluyendo aplicaciones y libreria
 ### ¿Cómo instalar?
 
 El archivo install.sh realiza la instalación básica de `docker` y ejecuta las lineas para llamar al contenedor.
+Instalar Ansible sera necesario para modificar las contraseñas encryptadas.
 
 ```bash
-bash install.sh
-```
-
-Si ya posee docker instalado puede ejecutar la siguiente instrucción:
-```bash
-sudo docker run -it --rm --name djangofull saengate/djfullapp
+docker-compose up --build -d
 ```
 
 ## Testing
 
 
 ## Requisitos
-* OS linux (Ubuntu/Debian)
-* Docker (Se instala con install.sh)
-* Docker-composer (Se instala con install.sh)
+
 
 ## Dependencias
-
+* Docker (Se instala con install.sh)
+* Docker-composer (Se instala con install.sh)
+* [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
 ## Notas
 
