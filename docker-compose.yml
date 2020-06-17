@@ -5,20 +5,18 @@ services:
     container_name: djangofull-redis
 
   db:
-    image: postgres:12.2
+    build: ./postgres
     container_name: djangofull-db
     restart: always
-    environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=userdb
-      - POSTGRES_DB=djangofulldb
+    tty: true
     ports:
       - 5432:5432
 
-  neo4j:
+  neo4j: # Needed config ansible neo4j
     image: neo4j:4.0.1
     container_name: djangofull-neo4j
     restart: always
+    # tty: true
     volumes:
       - ./project/neo4j:/data  # base de datos persistente
     environment:
@@ -28,13 +26,14 @@ services:
       - 7474:7474
       - 7687:7687
 
-  vue:
+  vue: # Needed config ansible vue
     build: ./vue
     container_name: djangofull-vue
+    # tty: true
     ports:
       - 80:80
 
-  web:
+  web: # Needed config ansible NGNIX
     build: ./project
     container_name: djangofull
     restart: always
