@@ -1,0 +1,15 @@
+---
+- name: Install Required RedHat Packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - which
+
+- name: Add Neo4j Yum Repo
+  yum_repository:
+    name: neo4j
+    description: Neo4j Yum Repo
+    baseurl: https://yum.neo4j.com/stable
+    gpgkey: https://debian.neo4j.com/neotechnology.gpg.key
+    gpgcheck: true
