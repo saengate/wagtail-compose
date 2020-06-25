@@ -1,0 +1,10 @@
+---
+# tasks file for ansible-role-bitbucket
+- block:
+  - name: Test ansible docker
+    copy:
+      dest: "/tmp/test.txt"
+      content: |
+        dog1
+        tiger
+...

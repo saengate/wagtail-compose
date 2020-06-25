@@ -1,0 +1,36 @@
+---
+postgresql_admin_user: "{{ vault_postgresql_admin_user }}"
+# List of databases to be created (optional)
+# Note: for more flexibility with extensions use the postgresql_database_extensions setting.
+postgresql_databases:
+  - name: "{{ vault_database_name }}"
+    owner: "{{ vault_postgresql_user }}"          # optional; specify the owner of the database
+    hstore: yes         # flag to install the hstore extension on this database (yes/no)
+    uuid_ossp: yes      # flag to install the uuid-ossp extension on this database (yes/no)
+    citext: yes         # flag to install the citext extension on this database (yes/no)
+    encoding: "UTF-8"   # override global {{ postgresql_encoding }} variable per database
+    lc_collate: "en_US.utf8"   # override global {{ postgresql_locale }} variable per database
+    lc_ctype: "en_US.utf8"     # override global {{ postgresql_ctype }} variable per database
+
+# List of users to be created (optional)
+postgresql_users:
+  - name: "{{ vault_postgresql_user }}"
+    pass: "{{ vault_postgresql_password }}"
+    encrypted: yes  # if password should be encrypted, postgresql >= 10 does only accepts encrypted passwords
+
+# List of user privileges to be applied (optional)
+postgresql_user_privileges:
+  - name: "{{ vault_postgresql_user }}"              # user name
+    db: "{{ vault_database_name }}"                  # database
+    priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+    role_attr_flags: "CREATEDB" # role attribute flags
+
+postgresql_listen_addresses:
+  - "*"
+postgresql_port: 5432
+
+# pg_hba.conf
+postgresql_pg_hba_md5_hosts:
+  - "0.0.0.0/0"
+
+...

@@ -1,0 +1,4 @@
+---
+branch: develop
+user_password: "{{ vault_user_pass }}"
+...

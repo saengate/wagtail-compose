@@ -1,13 +1,30 @@
-FROM nginx:latest
+FROM nginx:stable
 
 RUN apt-get update
-RUN apt-get install -y python3-pip supervisor python3-venv libpq-dev python3-dev
+RUN apt-get install -y python3-pip supervisor python3-venv libpq-dev python3-dev openssh-server openssh-client curl
 RUN pip3 install --upgrade pip
+
+RUN mkdir /var/run/sshd
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+RUN mkdir -p ~/.ssh
+RUN bash -c "ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null"
+RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+RUN chmod og-wx ~/.ssh/authorized_keys
 
 WORKDIR /tmp
 
-COPY project/requirements.txt ./
+COPY ansible /root/ansible
+COPY requirements.txt ./
 COPY scripts/config.sh ./
+
+# RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+# RUN python3 get-pip.py --user
+RUN pip3 install ansible
 
 RUN mkdir -p /webapps
 RUN bash config.sh
@@ -42,6 +59,8 @@ RUN chmod +x /usr/local/bin/*
 
 RUN ln -s /var/www/project/airflow/dags /usr/local/airflow/
 
-EXPOSE 80 5000 5555
+WORKDIR /var/www/project
 
-CMD ["/bin/bash"]
+EXPOSE 22 80 5000 5555
+
+ENTRYPOINT ["bash", "scripts/entrypoint.sh"]
