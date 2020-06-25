@@ -1,0 +1,4 @@
+---
+# Basic settings
+neo4j_server_database_location: /data
+...

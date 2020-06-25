@@ -1,8 +1,8 @@
 FROM debian:stable
 
 RUN apt-get update
-RUN apt-get install -y sudo python3-pip python3-apt python3-dev python3-psycopg2
-RUN apt-get install -y openssh-server openssh-client curl nano
+RUN apt-get install -y python3-pip python3-apt openssh-server openssh-client
+RUN apt-get install -y sudo curl nano
 RUN pip3 install --upgrade pip
 RUN pip3 install ansible
 
@@ -20,7 +20,11 @@ RUN chmod og-wx ~/.ssh/authorized_keys
 COPY ansible /root/ansible
 COPY ./scripts/entrypoint.sh /opt/scripts/
 
-EXPOSE 5432 22
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV PATH=$PATH:/usr/share/neo4j/bin:/usr/lib/jvm/java-11-openjdk-amd64/bin
+ENV NEO4J_HOME=/usr/share/neo4j
+
+EXPOSE 7687 7474 7473 22
 
 WORKDIR /opt/scripts
 ENTRYPOINT ["bash", "entrypoint.sh"]

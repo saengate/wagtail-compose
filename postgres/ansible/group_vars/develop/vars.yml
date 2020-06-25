@@ -24,4 +24,13 @@ postgresql_user_privileges:
     db: "{{ vault_database_name }}"                  # database
     priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
     role_attr_flags: "CREATEDB" # role attribute flags
+
+postgresql_listen_addresses:
+  - "*"
+postgresql_port: 5432
+
+# pg_hba.conf
+postgresql_pg_hba_md5_hosts:
+  - "0.0.0.0/0"
+
 ...
