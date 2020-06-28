@@ -1,4 +1,3 @@
 ---
-user: user
-local_user: ansible
+project_name: project
 ...

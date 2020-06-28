@@ -29,6 +29,7 @@ fab_logging_level = WARN
 # logging_config_class = my.path.default_local_settings.LOGGING_CONFIG
 logging_config_class =
 
+{% raw %}
 # Log format
 # we need to escape the curly braces by adding an additional curly brace
 log_format = [%%(asctime)s] {%%(filename)s:%%(lineno)d} %%(levelname)s - %%(message)s
@@ -38,6 +39,7 @@ simple_log_format = %%(asctime)s %%(levelname)s - %%(message)s
 # we need to escape the curly braces by adding an additional curly brace
 log_filename_template = {{ ti.dag_id }}/{{ ti.task_id }}/{{ ts }}/{{ try_number }}.log
 log_processor_filename_template = {{ filename }}.log
+{% endraw %}
 
 # Hostname by providing a path to a callable, which will resolve the hostname
 hostname_callable = socket:getfqdn
@@ -53,7 +55,7 @@ executor = CeleryExecutor
 # The SqlAlchemy connection string to the metadata database.
 # SqlAlchemy supports many different database engine, more information
 # their website
-sql_alchemy_conn = postgresql+psycopg2://userdb:password@djangofull-db:5432/djangofulldb
+sql_alchemy_conn = postgresql+psycopg2://{{postgresql_user}}:{{postgresql_password}}@djangofull-db:5432/{{database_name}}
 
 # If SqlAlchemy should pool database connections.
 sql_alchemy_pool_enabled = True
@@ -151,7 +153,7 @@ api_client = airflow.api.client.local_client
 # If you set web_server_url_prefix, do NOT forget to append it here, ex:
 # endpoint_url = http://localhost:8080/myroot
 # So api will look like: http://localhost:8080/myroot/api/experimental/...
-endpoint_url = http://localhost:8080
+endpoint_url = {{ host_airflow }}
 
 [api]
 # How to authenticate users of the API
@@ -185,13 +187,13 @@ default_hive_mapred_queue =
 # The base url of your website as airflow cannot guess what domain or
 # cname you are using. This is used in automated emails that
 # airflow sends to point links to the right web server
-base_url = http://localhost:8080
+base_url = {{ host_airflow }}
 
 # The ip specified when starting the web server
-web_server_host = 0.0.0.0
+web_server_host = {{ web_server_host }}
 
 # The port on which to run the web server
-web_server_port = 8080
+web_server_port = {{ web_server_port }}
 
 # Paths to the SSL certificate and key for the web server. When both are
 # provided SSL will be enabled. This does not change the web server port.
@@ -318,7 +320,7 @@ worker_log_server_port = 8793
 # a sqlalchemy database. Refer to the Celery documentation for more
 # information.
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#broker-settings
-broker_url = redis://redis:6379
+broker_url = {{ redis }}
 
 # The Celery result_backend. When a job finishes, it needs to update the
 # metadata of the job. Therefore it will post a message on a message bus,
@@ -327,18 +329,18 @@ broker_url = redis://redis:6379
 # The use of a database is highly recommended
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-result-backend-settings
 # result_backend = sqlite:///~/airflow_tutorial/airflow.db
- result_backend = db+postgresql://userdb:password@djangofull-db:5432/djangofulldb
+ result_backend = db+postgresql://{{postgresql_user}}:{{postgresql_password}}@djangofull-db:5432/{{database_name}}
 
 # Celery Flower is a sweet UI for Celery. Airflow has a shortcut to start
 # it `airflow flower`. This defines the IP that Celery Flower runs on
-flower_host = 0.0.0.0
+flower_host = {{ flower_host }}
 
 # The root URL for Flower
 # Ex: flower_url_prefix = /flower
 flower_url_prefix =
 
 # This defines the port that Celery Flower runs on
-flower_port = 5555
+flower_port = {{ flower_port }}
 
 # Default queue that tasks get assigned to and that worker listen on.
 default_queue = default

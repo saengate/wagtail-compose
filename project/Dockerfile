@@ -1,9 +1,12 @@
 FROM nginx:stable
 
 RUN apt-get update
-RUN apt-get install -y python3-pip supervisor python3-venv libpq-dev python3-dev openssh-server openssh-client curl
+RUN apt-get install -y python3-pip python3-venv python3-dev openssh-server openssh-client
+RUN apt-get install -y nano supervisor libpq-dev curl apt-utils
 RUN pip3 install --upgrade pip
+RUN pip3 install ansible virtualenv
 
+# Install and configure SSH
 RUN mkdir /var/run/sshd
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 # SSH login fix. Otherwise user is kicked off after login
@@ -16,51 +19,23 @@ RUN bash -c "ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev
 RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 RUN chmod og-wx ~/.ssh/authorized_keys
 
+# Environment Variables
+ENV AIRFLOW_HOME=/usr/local/airflow
+
 WORKDIR /tmp
 
-COPY ansible /root/ansible
-COPY requirements.txt ./
-COPY scripts/config.sh ./
+COPY ./ansible ./ansible
+COPY ./requirements.txt ./
+COPY ./scripts/entrypoint.sh ./
+COPY ./ ./project
 
-# RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-# RUN python3 get-pip.py --user
-RUN pip3 install ansible
+EXPOSE 22 80 5000 5555 8080
 
-RUN mkdir -p /webapps
-RUN bash config.sh
+WORKDIR /tmp/ansible
+RUN service ssh start && ssh-keyscan -H localhost >> ~/.ssh/known_hosts && ansible-playbook config-project.yml
 
-ENV AIRFLOW_HOME=/usr/local/airflow
-COPY ./airflow/airflow.cfg /usr/local/airflow/airflow.cfg
-RUN mkdir -p /var/log/airflow
+# Directorio del proyecto, debe modificarse si se cambia el directorio original
+# Su cambio provocara un fallo en travis
+WORKDIR /webapps/project
 
-ENV log=/var/log/project
-ENV project=/var/www/project
-
-RUN mkdir -p $log
-RUN touch $log/console.log
-RUN mkdir -p $project/conf
-
-WORKDIR $project
-
-COPY conf_server/project_start /usr/local/bin/
-COPY conf_server/project_websocket_start /usr/local/bin/
-COPY conf_server/project.supervisor.conf /etc/supervisor/conf.d/
-COPY conf_server/app.conf /etc/nginx/sites-available/
-COPY conf_server/timeout.conf /etc/nginx/conf.d/
-
-RUN mkdir -p /etc/nginx/sites-enabled
-RUN ln -s /etc/nginx/sites-available/app.conf /etc/nginx/sites-enabled/
-RUN ln -s /etc/nginx/sites-available/app.conf /etc/nginx/conf.d/
-RUN rm /etc/nginx/conf.d/default.conf
-
-# LOGS command bin
-COPY docker_bin/* /usr/local/bin/
-RUN chmod +x /usr/local/bin/*
-
-RUN ln -s /var/www/project/airflow/dags /usr/local/airflow/
-
-WORKDIR /var/www/project
-
-EXPOSE 22 80 5000 5555
-
-ENTRYPOINT ["bash", "scripts/entrypoint.sh"]
+ENTRYPOINT ["bash", "/tmp/entrypoint.sh"]
