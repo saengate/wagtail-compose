@@ -42,6 +42,12 @@ ansible-vault view ansible/group_vars/develop/vault.yml
 ```
 
 ## Desarrollo
-
+```sh
+docker-compose up --build
+```
 
 ## Paso a producción
+
+```sh
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
+```

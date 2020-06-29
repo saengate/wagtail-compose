@@ -42,9 +42,6 @@ services:
       - db
       - neo4j
       - vue
-    volumes:
-      - ./project:/webapps/project
-      - ./project/ansible:/tmp/ansible
     ports:
       - 23:22
       - 8000:80

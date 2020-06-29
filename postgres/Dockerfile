@@ -17,7 +17,7 @@ RUN bash -c "ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev
 RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 RUN chmod og-wx ~/.ssh/authorized_keys
 
-COPY ansible /root/ansible
+COPY ./ansible /root/ansible
 COPY ./scripts/entrypoint.sh /opt/scripts/
 
 EXPOSE 5432 22
