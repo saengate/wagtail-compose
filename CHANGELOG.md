@@ -9,3 +9,10 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Fixed
 ### Feature
 - Descripción [https://github.com/saengate/djfullapp/pull/ Y].
+
+## [0.1.0] - 2020-06-28
+### Feature
+- Se agrega roles de ansible a la instalción, se realizan varias integraciones para llegar esta beta.
+- Se agrega postgresql
+- Se agrega neo4j
+- se agrega vue
