@@ -1,3 +1,3 @@
 #!/bin/bash
-source /opt/venv/bin/activate
+source {{ path_venv }}/bin/activate
 exec airflow initdb && airflow flower

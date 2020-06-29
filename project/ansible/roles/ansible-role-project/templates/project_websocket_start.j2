@@ -4,8 +4,8 @@
 # sudo chmod u+x project_start
 # sudo b2b_dowloads_start
 
-DJANGODIR=/var/www/project
-VENV=/opt/venv/bin
+DJANGODIR={{ home }}/{{ project_name }}
+VENV={{ path_venv }}/bin
 NUM_WORKERS=$((2 * $(getconf _NPROCESSORS_ONLN) + 1))   # how many worker processes should Gunicorn spawn
 DJANGO_SETTINGS_MODULE=config.settings
 DJANGO_ASGI_MODULE=config.asgi:application

@@ -1,16 +1,20 @@
 #!/bin/bash
 
-NAME_APP=project                                        # This name will be visible for ps command
-DJANGODIR=/var/www/project
-VENV=/opt/venv/bin
-USER=root                                             # the user to run as
-GROUP=root                                            # the group to run as
+NAME_APP={{ project_name }}                                        # This name will be visible for ps command
+DJANGODIR={{ home }}/{{ project_name }}
+VENV={{ path_venv }}/bin
+USER={{ user }}                                             # the user to run as
+GROUP={{ group }}                                            # the group to run as
 NUM_WORKERS=$((2 * $(getconf _NPROCESSORS_ONLN) + 1))   # how many worker processes should Gunicorn spawn
 NUM_CPU=$(getconf _NPROCESSORS_ONLN)
 MAX_REQUESTS=$((1000 * $(getconf _NPROCESSORS_ONLN)))
 MAX_REQUESTS_JITTER=$((1000 * $(getconf _NPROCESSORS_ONLN) / 2))
 DJANGO_SETTINGS_MODULE=config.settings
 DJANGO_WSGI_MODULE=config.wsgi:application
+TIMEOUT=1800
+GRACEFUL_TIMEOUT=40
+WORKER_CONNECTIONS=1000
+LOG_LEVEL=debug
 
 echo "Starting $NAME as `whoami`"
 
@@ -29,12 +33,12 @@ exec $VENV/gunicorn ${DJANGO_WSGI_MODULE} \
   --threads $NUM_CPU \
   --workers $NUM_WORKERS \
   --worker-class gevent \
-  --graceful-timeout 40 \
-  --worker-connections=1000 \
+  --graceful-timeout $GRACEFUL_TIMEOUT \
+  --worker-connections=$WORKER_CONNECTIONS \
   --max-requests $MAX_REQUESTS \
   --max-requests-jitter $MAX_REQUESTS_JITTER \
   --user=$USER --group=$GROUP \
   --bind=unix:/tmp/django.socket \
-  --timeout=1800 \
-  --log-level=debug \
+  --timeout=$TIMEOUT \
+  --log-level=$LOG_LEVEL \
   --log-file=-
