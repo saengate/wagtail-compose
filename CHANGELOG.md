@@ -19,4 +19,4 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [0.2.0] - 2020-MM-DD
 ### Feature
-- Fusionar y ajustar variables y parametros de ansible que sean delicados en los distintos ambientes [https://github.com/saengate/djfullapp/pull/ #].
+- [Fusionar y ajustar variables y parametros de ansible que sean delicados en los distintos ambientes](https://github.com/saengate/djfullapp/pull/14).
