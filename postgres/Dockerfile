@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:stable as base-develop
 
 RUN apt-get update
 RUN apt-get install -y sudo python3-pip python3-apt python3-dev python3-psycopg2

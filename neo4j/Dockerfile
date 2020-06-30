@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:stable as base-develop
 
 RUN apt-get update
 RUN apt-get install -y python3-pip python3-apt openssh-server openssh-client
