@@ -1,7 +1,4 @@
 ---
 neo4j_password: "{{ vault_neo4j_password }}"
-neo4j_connector_bolt_listen_address: "{{ vault_neo4j_connector_bolt_port }}"
-neo4j_connector_http_listen_address: "{{ vault_neo4j_connector_http_port }}"
-neo4j_connector_https_listen_address: "{{ vault_neo4j_connector_https_port }}"
 default_listen_address: 0.0.0.0
 ...

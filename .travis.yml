@@ -13,11 +13,12 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 
 before_script:
-  - docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+  - docker-compose up --build -d
 
-# Si este script falla se debe a que se cambio la raiz o el nombre del proyecto en el dockerfile
+# Si este script falla puede deberse a que se cambio la raiz o el nombre del proyecto en el dockerfile
 script:
   - docker exec -it djangofull /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
+#   - docker exec djangofull-vue npm run test -- --coverage
 
 after_script:
   - docker-compose down

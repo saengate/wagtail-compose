@@ -5,7 +5,10 @@ services:
     container_name: djangofull-redis
 
   db:
-    build: ./postgres
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+      target: base-develop
     container_name: djangofull-db
     restart: always
     tty: true
@@ -14,12 +17,13 @@ services:
       - 24:22
 
   neo4j:
-    build: ./neo4j
+    build:
+      context: ./neo4j
+      dockerfile: Dockerfile
+      target: base-develop
     container_name: djangofull-neo4j
     restart: always
     tty: true
-    volumes:
-      - ./project/neo4j:/data  # base de datos persistente
     ports:
       - 7473:7473
       - 7474:7474
@@ -27,13 +31,19 @@ services:
       - 25:22
 
   vue:
-    build: ./vue
+    build:
+      context: ./vue
+      dockerfile: Dockerfile
+      target: prod
     container_name: djangofull-vue
     ports:
       - 80:80
 
   web:
-    build: ./project
+    build:
+      context: ./project
+      dockerfile: Dockerfile
+      target: base-develop
     container_name: djangofull
     restart: always
     tty: true

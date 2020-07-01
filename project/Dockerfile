@@ -1,4 +1,4 @@
-FROM nginx:stable
+FROM nginx:stable as base-develop
 
 RUN apt-get update
 RUN apt-get install -y python3-pip python3-venv python3-dev openssh-server openssh-client
@@ -29,7 +29,7 @@ COPY ./requirements.txt ./
 COPY ./scripts/entrypoint.sh ./
 COPY ./ ./project
 
-EXPOSE 22 80 5000 5555 8080
+EXPOSE 22 80 5555 8080
 
 WORKDIR /tmp/ansible
 RUN service ssh start && ssh-keyscan -H localhost >> ~/.ssh/known_hosts && ansible-playbook config-project.yml

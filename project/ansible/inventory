@@ -2,7 +2,7 @@
 localhost ansible_connection=local
 
 [qa]
-nodo2Ansible
+localhost ansible_connection=local
 
 [production]
-nodo3Ansible
+localhost ansible_connection=local

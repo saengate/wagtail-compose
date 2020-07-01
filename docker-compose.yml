@@ -5,7 +5,10 @@ services:
     container_name: djangofull-redis
 
   db:
-    build: ./postgres
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+      target: base-develop
     container_name: djangofull-db
     restart: always
     tty: true
@@ -14,7 +17,10 @@ services:
       - 24:22
 
   neo4j:
-    build: ./neo4j
+    build:
+      context: ./neo4j
+      dockerfile: Dockerfile
+      target: base-develop
     container_name: djangofull-neo4j
     restart: always
     tty: true
@@ -27,13 +33,19 @@ services:
       - 25:22
 
   vue:
-    build: ./vue
+    build:
+      context: ./vue
+      dockerfile: Dockerfile
+      target: prod
     container_name: djangofull-vue
     ports:
       - 80:80
 
   web:
-    build: ./project
+    build:
+      context: ./project
+      dockerfile: Dockerfile
+      target: base-develop
     container_name: djangofull
     restart: always
     tty: true
@@ -49,7 +61,6 @@ services:
       - 23:22
       - 8000:80
       - 8001:8080
-      - 5000:5000
       - 5050:5555
     environment:
       - NGINX_HOST=localhost
