@@ -17,6 +17,7 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Se agrega neo4j
 - se agrega vue
 
-## [0.2.0] - 2020-MM-DD
+## [0.3.0] - 2020-MM-DD
 ### Feature
 - [Fusionar y ajustar variables y parametros de ansible que sean delicados en los distintos ambientes](https://github.com/saengate/djfullapp/pull/14).
+- [Crear shell script con comando para facilitar el uso del proyecto, docker y vault-ansible](https://github.com/saengate/djfullapp/pull/15).

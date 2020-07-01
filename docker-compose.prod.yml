@@ -34,7 +34,7 @@ services:
     build:
       context: ./vue
       dockerfile: Dockerfile
-      target: base-develop
+      target: prod
     container_name: djangofull-vue
     ports:
       - 80:80
