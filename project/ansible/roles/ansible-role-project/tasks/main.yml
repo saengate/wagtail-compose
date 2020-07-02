@@ -70,7 +70,6 @@
       requirements: /tmp/requirements.txt
       virtualenv: /opt/venv
       virtualenv_python: python3
-      # executable: pip3
       extra_args: --no-cache-dir
 
 - block:
@@ -96,12 +95,9 @@
       - airflow-scheduler
       - airflow-server
       - airflow-queue
-      - create-admin
-      - entrypoint
-      - log-project
-      - log-supervisor
-      - log-websocket
-
+      - cmdp
+      - venvproject
+      - runsupervisor
 
   - name: Inicializa variable programas
     set_fact:
@@ -131,7 +127,7 @@
   - name: Supervisor | Update configuration (supervisor.conf)
     template:
       src: supervisord.conf.j2
-      dest: "/etc/supervisord.conf"
+      dest: "/etc/supervisor/supervisord.conf"
       owner: root
       group: root
       mode: 0644

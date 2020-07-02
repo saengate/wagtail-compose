@@ -9,5 +9,6 @@ description_ports="
         8001    airflow
         23      ssh
 "
-volume='-v $(pwd)/ansible:/tmp/ansible -v $(pwd):/webapps/project'
+project=true
+
 source $(pwd $0)/../cmd-container-template

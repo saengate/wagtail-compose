@@ -88,3 +88,20 @@ Cada contenedor contiene una llave para el Vault de ansible, debe ingresar a cad
 el archivo .key dentro de la carpeta ansible si desea cambiar las contraseñas.
 En la configuración de ansible puede buscar la palabra ".key" y comentar la linea para que no busque
 la contraseña en un archivo y así asignar una contraseña nueva y guardarla en algún lugar seguro.
+
+## Error
+
+### Supervisor
+
+```sh
+unix:///var/run/supervisor.sock no such file
+```
+
+En ocasiones necesitaras reiniciar el servicio, y verás este error,  el problema se debe a que hace falta carga 
+cada vez las configuraciones de supervisor, el comando es simple pero para simplificar la tarea ejecuta el siguiente
+comando que carga las configuraciones y refresta todo el entorno supervisor. (Si quieres conocer los detalles,
+revisa el archivo en ansible template dentro del projecto o en /usr/local/bin/runsupervisor)
+
+```sh
+runsupervisor
+```
