@@ -14,6 +14,9 @@ import os
 
 from os import getenv
 
+from utils.color_logging import formatter
+
+
 ENVIRONMENT = 'develop'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -172,3 +175,48 @@ HOSTS = {
 }
 
 WS_ALLOWED_HOSTS = ['*'] if DEBUG else HOSTS[ENVIRONMENT]
+
+# LOGS
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters' : {
+        'standard' : {
+            'format' : formatter(),
+        },
+    },
+    'handlers': {
+        'file': {
+            'level' : 'INFO',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : '/var/log/project/project.log',
+            'maxBytes' : 1024*1024*10, # 10MB
+            'backupCount' : 5,
+            'formatter' : 'standard',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter' : 'standard',
+        },
+    },
+    'loggers': {
+        '': {
+            'class': 'utils.color_logging.NewLogger',
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'console': {
+            'class': 'utils.color_logging.NewLogger',
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'all': {
+            'class': 'utils.color_logging.NewLogger',
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
