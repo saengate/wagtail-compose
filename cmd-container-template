@@ -23,7 +23,6 @@ GREEN=`tput setaf 2`
 BLUE=`tput setaf 4`
 env=
 
-
 help()
 {
     echo "${BLUE}
@@ -48,6 +47,7 @@ help()
                                                 especificado
     -vv | --vault_view    [ dev | qa | prod ]   Muestra los valores del ambiente especificado   (ansible-vault view)
     ${NC}
+    ${RED}Recuerda estar dentro de la carpeta del contenedor $container antes de ejecutar estos comandos ${NC}
     "
 }
 

@@ -10,9 +10,10 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Feature
 - [Descripción.](https://github.com/saengate/djfullapp/pull/#)
 
-## [0.3.0] - 2020-07-01
+## [0.3.0] - 2020-07-03
 ### Feature
 - [Configura el registro de logs con colores y agrega comandos shell para el uso del projecto.](https://github.com/saengate/djfullapp/pull/17)
+- [Agregar `Poetry` como manejador de paquetes en remplazo del `requirements.txt`.](https://github.com/saengate/djfullapp/pull/18)
 
 ## [0.2.0] - 2020-07-01
 ### Feature
