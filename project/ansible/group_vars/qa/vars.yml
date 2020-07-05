@@ -2,7 +2,7 @@
 group: "{{ vault_group }}"
 user: "{{ vault_user }}"
 home: "{{ vault_home }}"
-path_venv: /opt/venv  # Recuerda modificar travis si cambias este valor
+path_venv: "/opt/venv"  # Recuerda modificar travis si cambias este valor
 
 # Estas contraseñas deben coincidir con las postgres
 database_name: "{{ vault_database_name }}"

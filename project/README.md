@@ -3,10 +3,15 @@ Plantilla para proyecto django
 
 ## Desarrollo
 
+No olvides recargar los paquetes de python en caso de que agregues nuevas librerias.
+```sh
+poetry lock
+```
+
 Puede ejecutar  para facilitar el uso del proyecto:
 Para ejecutar el comando debe estar dentro de la carpeta contenedora de cada contanedor.
 ```sh
-./cmd -h
+./cmd -h | cmd -h
 ```
 ```sh
 -h  | * | --help   muestran los comandos disponibles
@@ -53,6 +58,10 @@ source venvproject
 ```
 
 ## Notas
+
+Este repositorio usa [poetry](https://pypi.org/project/poetry/) para la instalación de sus dependencias.
+
+Se pueden crear distribución pip siguiendo las instrucciones del siguiente [link](https://randomwalk.in/python/bash/2020/01/19/PoetryPackaging.html)
 
 Algunas de los siguientes comandos ya han sido incluidos en el comando "cmd"
 Levantar este contenedor especificamente.

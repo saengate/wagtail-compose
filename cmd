@@ -26,6 +26,8 @@ help()
     -DB  | --daemon_build   construye e incia el proyecto en background (docker-compose up --build -d)
     -d   | --start          inciar el proyecto con verbose              (docker-compose up)
     -db  | --start_build    construye e incia el proyecto con verbose   (docker-compose up --build)
+    -dl  | --docker_list    lista los contenedores por Imagen Estado y  (docker ps)
+                            Puestos
     -p   | --shell_project  accede al contenedor del proyecto           (docker exec -it)
     -tp  | --tests_python   entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
                             los tests de Python
@@ -64,6 +66,12 @@ start_build()
     docker-compose up --build --remove-orphans;
 }
 
+docker_list()
+{
+    echo "${GREEN}Lista los contenedores por Imagen Estado y Puestos${NC}";
+    docker ps --format "table {{.Image}}\t{{.Status}}\t{{.Ports}}";
+}
+
 shell_project()
 {
     echo "${GREEN}Ingresando al contendedor del proyecto${NC}";
@@ -73,7 +81,7 @@ shell_project()
 tests_python()
 {
     echo "${GREEN}Ejecutando los tests PYTHON del proyecto${NC}";
-    docker exec -it djangofull /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test";
+    docker exec -it djangofull /bin/bash -c "poetry run python3 manage.py test";
 }
 
 # Comentado hasta que se agregue la ejecución de tests en Vue
@@ -125,6 +133,9 @@ while [ "$1" != "" ]; do
                                     exit
                                     ;;
         -tp  | --tests_python )     tests_python
+                                    exit
+                                    ;;
+        -dl  | --docker_list )      docker_list
                                     exit
                                     ;;
 #         -tn  | --tests_npm )        tests_npm

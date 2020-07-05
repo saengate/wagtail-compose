@@ -3,9 +3,9 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/saengate/djfullapp)](https://github.com/saengate/djfullapp/graphs/contributors)
 [![Build Status](https://travis-ci.org/saengate/djfullapp.svg?branch=master)](https://travis-ci.org/saengate/djfullapp)
 
-# Django - Postgresql-11 - Nginx
+# DJFULLAPP
 
-Imagen de Django 2.2.13/VueJs con Nginx, PostgreSQL, Neo4j y Apache Airflow.
+### Imagen de Django 2.2.13/VueJs con Nginx (Supervisor-Daphne), PostgreSQL, Neo4j y Apache Airflow.
 
 ## Descripción
 
@@ -13,9 +13,42 @@ Crear una imagen de docker con roles ansible que sirve como template para otras 
 Al usar ansible se pueden modificar las contraseñas importantes y las configuraciones.
 Solo debe tenerse cuidado en los contenedores si se cambian los puertos.
 
+### Dependencias
+
+* [Docker](https://docs.docker.com/engine/install/)
+* [Docker-composer](https://docs.docker.com/compose/install/)
+* [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+* [poetry](https://pypi.org/project/poetry/)
+
+### ¿Cómo instalar?
+
+Debes tener instalado docker y ansible en tu equipo, se dejan arriba los links para su instalación.
+Instalar Ansible sera necesario para modificar las contraseñas encryptadas.
+
+## Desarrollo
+
+Te recomiendo usar alias en tu perfil de usuario para que te sea sencillo usar los scripts que facilita el proyecto
+por ejemplo, esto puedes hacerlo buscando en tu $HOME el archivo `.bashrc` o `.zshrc`, entre otros, si no conoces de ellos
+busca los archivos que terminan en `rc` dentro del $HOME o investiga un poco al respecto sobre como agregar las variables
+de entorno en tu OS.
+
+```sh
+export PROJECT="/dir/path/djfullapp"
+alias cds="$PROJECT"
+alias cmd="$PROJECT/cmd"
+alias cmdp="$PROJECT/project/cmd"
+alias cmdn="$PROJECT/neo4j/cmd"
+alias cmdb="$PROJECT/postgres/cmd"
+```
+
+Levantar el proyecto
+```sh
+docker-compose up --build -d | cmd -db
+```
+
 Se agrega el comando "cmd" para facilitar el uso del proyecto y su interacción con docker-compose y vault-ansible:
 ```sh
-./cmd -h
+./cmd -h | cmd -h
 ```
 ```sh
 -h | * | --help   muestran los comandos disponibles
@@ -24,6 +57,8 @@ Se agrega el comando "cmd" para facilitar el uso del proyecto y su interacción 
 -DB  | --daemon_build   construye e incia el proyecto en background (docker-compose up --build -d)
 -d   | --start          inciar el proyecto con verbose              (docker-compose up)
 -db  | --start_build    construye e incia el proyecto con verbose   (docker-compose up --build)
+-dl  | --docker_list    lista los contenedores por Imagen Estado y  (docker ps)
+                        Puestos
 -p   | --shell_project  accede al contenedor del proyecto           (docker exec -it)
 -tp  | --tests_python   entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
                         los tests de Python
@@ -35,22 +70,13 @@ INHABILITADA -tn
 -s   | --stop           detiene los contenedores                    (docker-compose down)
 ```
 
-### Dependencias
+### Manejo de branch
 
-* [Docker](https://docs.docker.com/engine/install/)
-* [Docker-composer](https://docs.docker.com/compose/install/)
-* [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
-
-### ¿Cómo instalar?
-
-Debes tener instalado docker y ansible en tu equipo, se dejan arriba los links para su instalación.
-Instalar Ansible sera necesario para modificar las contraseñas encryptadas.
-
-## Desarrollo
-
-```sh
-docker-compose up --build -d
-```
+Uso git `hubflow` para el trabajo con las ramas
+Para iniciar el uso de hubflow en el proyecto por primera vez usa `git hf init`
+Para crear una nueva rama `git hf `TAG` start nombre-de-la-rama` recuerda que TAG varia dependiendo del objetivo de la rama.
+Para actualizar la rama y `develop` con los cambios que esten arriba ejecuta `git hf update`.
+Elimina la rama localmente y en github `git hf feature finish nombre-de-la-rama`.
 
 ## Testing
 
@@ -105,3 +131,14 @@ revisa el archivo en ansible template dentro del projecto o en /usr/local/bin/ru
 ```sh
 runsupervisor
 ```
+
+## Deploy de una nueva versión.
+
+Para generar una nueva versión, se debe crear un PR (con un título "Release X.Y.Z" con los valores que correspondan para X, Y y Z). Se debe seguir el estándar semver para determinar si se incrementa el valor de X (si hay cambios no retrocompatibles), Y (para mejoras retrocompatibles) o Z (si sólo hubo correcciones a bugs).
+
+En ese PR deben incluirse los siguientes cambios:
+
+Modificar el archivo `CHANGELOG.md` y `VERSION` para incluir una nueva entrada (al comienzo) para X.Y.Z que explique los cambios.
+Modificar el archivo `poetry.toml` para que la propiedad `"version"` apunte a la nueva versión X.Y.Z
+
+Luego de obtener aprobación del pull request, debe mezclarse a master e inmediatamente generar un release en GitHub con el tag X.Y.Z. En la descripción del release debes poner lo mismo que agregaste al changelog.

@@ -47,6 +47,7 @@ createadmin()
     ./manage.py collectstatic;
     ./python manage.py install_labels;
     echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('{{django_user}}', '{{django_email}}', '{{django_password}}')" | ./manage.py shell;
+
 }
 
 logproject()
@@ -84,6 +85,11 @@ help()
     ${NC}
     "
 }
+
+if [ "$1" == "" ]; then
+    help
+    exit 1
+fi
 
 while [ "$1" != "" ]; do
     case $1 in
