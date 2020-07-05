@@ -91,6 +91,7 @@
       - airflow-scheduler
       - airflow-server
       - airflow-queue
+      - django-migrate
       - cmdp
       - venvproject
       - runsupervisor

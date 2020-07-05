@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'channels',
     'django_neomodel',
+    'easyaudit',
     'ses',
 ]
 
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -220,3 +222,31 @@ LOGGING = {
         },
     },
 }
+
+
+# AUDIT [django-easy-audit](https://github.com/soynatan/django-easy-audit)
+
+DJANGO_EASY_AUDIT_WATCH_MODEL_EVENTS = True
+DJANGO_EASY_AUDIT_WATCH_AUTH_EVENTS = True
+DJANGO_EASY_AUDIT_WATCH_REQUEST_EVENTS = True
+
+# DJANGO_EASY_AUDIT_UNREGISTERED_CLASSES_EXTRA = ['app_name.model_name']
+# DJANGO_EASY_AUDIT_UNREGISTERED_URLS_EXTRA = ['url']
+# DJANGO_EASY_AUDIT_CRUD_DIFFERENCE_CALLBACKS = ['string-paths-to-functions-classes']
+
+# This is reserved for future use (does not do anything yet) 1.2.2
+# DJANGO_EASY_AUDIT_USER_DB_CONSTRAINT = 'default'
+
+# DJANGO_EASY_AUDIT_CRUD_EVENT_LIST_FILTER = ['event_type', 'content_type', 'user', 'datetime', ] 
+# DJANGO_EASY_AUDIT_LOGIN_EVENT_LIST_FILTER = ['login_type', 'user', 'datetime', ]
+# DJANGO_EASY_AUDIT_REQUEST_EVENT_LIST_FILTER = ['method', 'user', 'datetime', ]
+
+# DJANGO_EASY_AUDIT_DATABASE_ALIAS = 'default '
+
+# No guarda auditoria si no han ocurrido cambios
+DJANGO_EASY_AUDIT_CRUD_EVENT_NO_CHANGED_FIELDS_SKIP = True
+
+# Solo lectura impide que un superusuario los modifique
+DJANGO_EASY_AUDIT_READONLY_EVENTS = True
+
+# DJANGO_EASY_AUDIT_LOGGING_BACKEND = 'easyaudit.backends.ModelBackend'

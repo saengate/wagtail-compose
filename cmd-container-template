@@ -20,12 +20,12 @@
 NC=`tput sgr0`
 RED=`tput setaf 1`
 GREEN=`tput setaf 2`
-BLUE=`tput setaf 4`
+CYAN=`tput setaf 6`
 env=
 
 help()
 {
-    echo "${BLUE}
+    echo "${CYAN}
     Ayuda: Comandos de ayuda para facilitar el uso del proyecto:
     Abre los puertos:
         $description_ports

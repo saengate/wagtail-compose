@@ -13,30 +13,32 @@
 
 NC=`tput sgr0`
 GREEN=`tput setaf 2`
-BLUE=`tput setaf 4`
+CYAN=`tput setaf 6`
 
 help()
 {
-    echo "${BLUE}
+    echo "${CYAN}
     Ayuda: Comandos de ayuda para facilitar el uso del proyecto:
 
     -h | * | --help   muestran los comandos disponibles
 
-    -D   | --daemon         inciar el proyecto en background            (docker-compose up -d)
-    -DB  | --daemon_build   construye e incia el proyecto en background (docker-compose up --build -d)
-    -d   | --start          inciar el proyecto con verbose              (docker-compose up)
-    -db  | --start_build    construye e incia el proyecto con verbose   (docker-compose up --build)
-    -dl  | --docker_list    lista los contenedores por Imagen Estado y  (docker ps)
-                            Puestos
-    -p   | --shell_project  accede al contenedor del proyecto           (docker exec -it)
-    -tp  | --tests_python   entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
-                            los tests de Python
+    -D   | --daemon             inciar el proyecto en background            (docker-compose up -d)
+    -DB  | --daemon_build       construye e incia el proyecto en background (docker-compose up --build -d)
+    -d   | --start              inciar el proyecto con verbose              (docker-compose up)
+    -db  | --start_build        construye e incia el proyecto con verbose   (docker-compose up --build)
+    -dl  | --docker_list        lista los contenedores por Imagen Estado y  (docker ps)
+                                Puestos
+    -p   | --shell_project      accede al contenedor del proyecto           (docker exec -it)
+    -pt  | --tests_project      entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
+                                los tests de Python
+    -pm  | --proyect_migrate    ejecuta las migraciones en el proyecto      (docker exec -it...django-migrate)
+
     INHABILITADA -tn
-    -tn  | --tests_npm      entra al contenedor de vue y ejecuta        (docker exec -it...npm run test)
-                            los tests npm
-    -pg  | --shell_postgres accede al contenedor de PostgreSQL          (docker exec -it)
-    -neo | --shell_neo4j    accede al contenedor de Neo4j               (docker exec -it)
-    -s   | --stop           detiene los contenedores                    (docker-compose down)
+    -tn  | --tests_npm          entra al contenedor de vue y ejecuta        (docker exec -it...npm run test)
+                                los tests npm
+    -pg  | --shell_postgres     accede al contenedor de PostgreSQL          (docker exec -it)
+    -neo | --shell_neo4j        accede al contenedor de Neo4j               (docker exec -it)
+    -s   | --stop               detiene los contenedores                    (docker-compose down)
     ${NC}
     "
 }
@@ -69,7 +71,7 @@ start_build()
 docker_list()
 {
     echo "${GREEN}Lista los contenedores por Imagen Estado y Puestos${NC}";
-    docker ps --format "table {{.Image}}\t{{.Status}}\t{{.Ports}}";
+    docker ps --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
 }
 
 shell_project()
@@ -78,10 +80,17 @@ shell_project()
     docker exec -it djangofull /bin/bash;
 }
 
-tests_python()
+tests_project()
 {
     echo "${GREEN}Ejecutando los tests PYTHON del proyecto${NC}";
-    docker exec -it djangofull /bin/bash -c "poetry run python3 manage.py test";
+    docker exec -it djangofull /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test";
+}
+
+proyect_migrate()
+{
+    echo "${GREEN}Ejecutando las migraciones DJANGO ${NC}";
+    echo "${RED}Recuerde que debe tener la base de datos funcionando ${NC}";
+    docker exec -it djangofull /bin/bash -c "django-migrate";
 }
 
 # Comentado hasta que se agregue la ejecución de tests en Vue
@@ -132,7 +141,10 @@ while [ "$1" != "" ]; do
         -p   | --shell_project )    shell_project
                                     exit
                                     ;;
-        -tp  | --tests_python )     tests_python
+        -pt  | --tests_project )    tests_project
+                                    exit
+                                    ;;
+        -pm  | --proyect_migrate )  proyect_migrate
                                     exit
                                     ;;
         -dl  | --docker_list )      docker_list

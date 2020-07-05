@@ -18,12 +18,16 @@ Solo debe tenerse cuidado en los contenedores si se cambian los puertos.
 * [Docker](https://docs.docker.com/engine/install/)
 * [Docker-composer](https://docs.docker.com/compose/install/)
 * [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
-* [poetry](https://pypi.org/project/poetry/)
 
 ### ¿Cómo instalar?
 
 Debes tener instalado docker y ansible en tu equipo, se dejan arriba los links para su instalación.
 Instalar Ansible sera necesario para modificar las contraseñas encryptadas.
+
+### Librerias de terceros
+
+[django-easy-audit](https://github.com/soynatan/django-easy-audit) Es una aplicación de auditoria de fácil uso que he incluido en este projecto. De momento, estará en evaluación y si cumple con las espectativas se volverá parte del proyecto. Todas las instrucciones de uso se encuentran en la descripción de dicho proyecto (Realmente parece que no requiere de ninguna interacción en los modelos, así que al ser prácticamente innecesaria la interacción del desarrollador para su ejecución se evita que por olvido no se monitoree algún modelo, simplemente genial).
+
 
 ## Desarrollo
 
@@ -70,6 +74,10 @@ INHABILITADA -tn
 -s   | --stop           detiene los contenedores                    (docker-compose down)
 ```
 
+### Librerias (pip requirements.txt y poetry)
+
+Este proyecto no usa directamente requirements para instalar el proyecto, en su lugar usa [poetry](https://pypi.org/project/poetry/) que generara el archivo durante la creación del contenedor y maneja efectivamente las versiones de las librerias. Se usa este metodo para aprovechar las ventajas de poetry y las ventajas de pip y descartar sus falencias. Revisa el archivo `pyproject.toml` para agregar las librerias, usa el siguiente link para entender como agregar la [versión](https://python-poetry.org/docs/dependency-specification/).
+
 ### Manejo de branch
 
 Uso git `hubflow` para el trabajo con las ramas
@@ -78,13 +86,25 @@ Para crear una nueva rama `git hf `TAG` start nombre-de-la-rama` recuerda que TA
 Para actualizar la rama y `develop` con los cambios que esten arriba ejecuta `git hf update`.
 Elimina la rama localmente y en github `git hf feature finish nombre-de-la-rama`.
 
-## Testing
+### Testing
 
 Se pueden ejecutar las pruebas de python usando el comando:
 ```sh
 ./cmd -tp | --tests_python
 ```
 Aún están por agregarse las pruebas en vue
+
+### Deploy de una nueva versión.
+
+Para generar una nueva versión, se debe crear un PR (con un título "Release X.Y.Z" con los valores que correspondan para X, Y y Z). Se debe seguir el estándar semver para determinar si se incrementa el valor de X (si hay cambios no retrocompatibles), Y (para mejoras retrocompatibles) o Z (si sólo hubo correcciones a bugs).
+
+En ese PR deben incluirse los siguientes cambios:
+
+Modificar el archivo `CHANGELOG.md` y `VERSION` para incluir una nueva entrada (al comienzo) para X.Y.Z que explique los cambios.
+Modificar el archivo `poetry.toml` para que la propiedad `"version"` apunte a la nueva versión X.Y.Z
+
+Luego de obtener aprobación del pull request, debe mezclarse a master e inmediatamente generar un release en GitHub con el tag X.Y.Z. En la descripción del release debes poner lo mismo que agregaste al changelog.
+
 
 ## Paso a producción
 
@@ -93,6 +113,7 @@ de ansible config-(contenedor).yml
 ```sh
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
 ```
+
 
 ## Notas
 
@@ -115,7 +136,8 @@ el archivo .key dentro de la carpeta ansible si desea cambiar las contraseñas.
 En la configuración de ansible puede buscar la palabra ".key" y comentar la linea para que no busque
 la contraseña en un archivo y así asignar una contraseña nueva y guardarla en algún lugar seguro.
 
-## Error
+
+## Errores conocidos
 
 ### Supervisor
 
@@ -131,14 +153,3 @@ revisa el archivo en ansible template dentro del projecto o en /usr/local/bin/ru
 ```sh
 runsupervisor
 ```
-
-## Deploy de una nueva versión.
-
-Para generar una nueva versión, se debe crear un PR (con un título "Release X.Y.Z" con los valores que correspondan para X, Y y Z). Se debe seguir el estándar semver para determinar si se incrementa el valor de X (si hay cambios no retrocompatibles), Y (para mejoras retrocompatibles) o Z (si sólo hubo correcciones a bugs).
-
-En ese PR deben incluirse los siguientes cambios:
-
-Modificar el archivo `CHANGELOG.md` y `VERSION` para incluir una nueva entrada (al comienzo) para X.Y.Z que explique los cambios.
-Modificar el archivo `poetry.toml` para que la propiedad `"version"` apunte a la nueva versión X.Y.Z
-
-Luego de obtener aprobación del pull request, debe mezclarse a master e inmediatamente generar un release en GitHub con el tag X.Y.Z. En la descripción del release debes poner lo mismo que agregaste al changelog.
