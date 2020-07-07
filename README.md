@@ -5,7 +5,7 @@
 
 # DJFULLAPP
 
-### Imagen de Django 2.2.13/VueJs con Nginx (Supervisor-Daphne), PostgreSQL, Neo4j y Apache Airflow.
+### Imagen de Django 2.2/Vue CLI v4.4 con Nginx (Supervisor-Daphne), PostgreSQL, Neo4j y Apache Airflow.
 
 ## Descripción
 
@@ -40,9 +40,10 @@ de entorno en tu OS.
 export PROJECT="/dir/path/djfullapp"
 alias cds="$PROJECT"
 alias cmd="$PROJECT/cmd"
-alias cmdp="$PROJECT/project/cmd"
-alias cmdn="$PROJECT/neo4j/cmd"
-alias cmdb="$PROJECT/postgres/cmd"
+alias cmdp="$PROJECT/project/cmdp"
+alias cmdn="$PROJECT/neo4j/cmdn"
+alias cmdb="$PROJECT/postgres/cmdb"
+alias cmdv="$PROJECT/vue/cmdv"
 ```
 
 Levantar el proyecto
@@ -57,21 +58,25 @@ Se agrega el comando "cmd" para facilitar el uso del proyecto y su interacción 
 ```sh
 -h | * | --help   muestran los comandos disponibles
 
--D   | --daemon         inciar el proyecto en background            (docker-compose up -d)
--DB  | --daemon_build   construye e incia el proyecto en background (docker-compose up --build -d)
--d   | --start          inciar el proyecto con verbose              (docker-compose up)
--db  | --start_build    construye e incia el proyecto con verbose   (docker-compose up --build)
--dl  | --docker_list    lista los contenedores por Imagen Estado y  (docker ps)
-                        Puestos
--p   | --shell_project  accede al contenedor del proyecto           (docker exec -it)
--tp  | --tests_python   entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
-                        los tests de Python
-INHABILITADA -tn
--tn  | --tests_npm      entra al contenedor de vue y ejecuta        (docker exec -it...npm run test)
-                        los tests npm
--pg  | --shell_postgres accede al contenedor de PostgreSQL          (docker exec -it)
--neo | --shell_neo4j    accede al contenedor de Neo4j               (docker exec -it)
--s   | --stop           detiene los contenedores                    (docker-compose down)
+-D   | --daemon             inciar el proyecto en background            (docker-compose up -d)
+-DB  | --daemon_build       construye e incia el proyecto en background (docker-compose up --build -d)
+-d   | --start              inciar el proyecto con verbose              (docker-compose up)
+-db  | --start_build        construye e incia el proyecto con verbose   (docker-compose up --build)
+-dl  | --docker_list        lista los contenedores por Nombre, Estado y (docker ps)
+                            Puestos
+
+-pm  | --proyect_migrate    ejecuta las migraciones en el proyecto      (docker exec -it...django-migrate)
+
+-tp  | --tests_project      entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
+                            los tests de Python
+-tn  | --tests_npm          entra al contenedor de vue y ejecuta        (docker exec -it...npm run test)
+                            los tests npm
+
+-sp  | --shell_project      accede al contenedor del proyecto           (docker exec -it)
+-sd  | --shell_postgres     accede al contenedor de PostgreSQL          (docker exec -it)
+-sn  | --shell_neo4j        accede al contenedor de Neo4j               (docker exec -it)
+
+-s   | --stop               detiene los contenedores                    (docker-compose down)
 ```
 
 ### Librerias (pip requirements.txt y poetry)
@@ -82,7 +87,8 @@ Este proyecto no usa directamente requirements para instalar el proyecto, en su 
 
 Uso git `hubflow` para el trabajo con las ramas
 Para iniciar el uso de hubflow en el proyecto por primera vez usa `git hf init`
-Para crear una nueva rama `git hf `TAG` start nombre-de-la-rama` recuerda que TAG varia dependiendo del objetivo de la rama.
+Para crear una nueva rama `git hf TAG start NOMBRE-DE-LA-RAMA` recuerda que TAG varia dependiendo del objetivo de la rama.
+Debes mezclar la rama según su flujo normal `git push origin TAG/NOMBRE-DE-LA-RAMA`.
 Para actualizar la rama y `develop` con los cambios que esten arriba ejecuta `git hf update`.
 Elimina la rama localmente y en github `git hf feature finish nombre-de-la-rama`.
 
@@ -110,6 +116,7 @@ Luego de obtener aprobación del pull request, debe mezclarse a master e inmedia
 
 Aún no esta listo para producción, se deben cambiar manualmente el `hosts: production` en cada archivo del contenedor
 de ansible config-(contenedor).yml
+
 ```sh
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
 ```

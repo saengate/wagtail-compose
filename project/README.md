@@ -11,7 +11,7 @@ poetry lock
 Puede ejecutar  para facilitar el uso del proyecto:
 Para ejecutar el comando debe estar dentro de la carpeta contenedora de cada contanedor.
 ```sh
-./cmd -h | cmd -h
+./cmdp -h | cmdp -h
 ```
 ```sh
 -h  | * | --help   muestran los comandos disponibles

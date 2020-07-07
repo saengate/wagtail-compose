@@ -95,6 +95,7 @@
       - cmdp
       - venvproject
       - runsupervisor
+      - wait-for-it
 
   - name: Inicializa variable programas
     set_fact:

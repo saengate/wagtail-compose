@@ -33,7 +33,7 @@ services:
   vue:
     build:
       context: ./vue
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       target: prod
     container_name: djangofull-vue
     ports:
@@ -61,3 +61,4 @@ services:
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
+    command: wait-for-it db:5432 -- django-migrate

@@ -26,18 +26,20 @@ help()
     -DB  | --daemon_build       construye e incia el proyecto en background (docker-compose up --build -d)
     -d   | --start              inciar el proyecto con verbose              (docker-compose up)
     -db  | --start_build        construye e incia el proyecto con verbose   (docker-compose up --build)
-    -dl  | --docker_list        lista los contenedores por Imagen Estado y  (docker ps)
+    -dl  | --docker_list        lista los contenedores por Nombre, Estado y (docker ps)
                                 Puestos
-    -p   | --shell_project      accede al contenedor del proyecto           (docker exec -it)
-    -pt  | --tests_project      entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
-                                los tests de Python
+
     -pm  | --proyect_migrate    ejecuta las migraciones en el proyecto      (docker exec -it...django-migrate)
 
-    INHABILITADA -tn
+    -tp  | --tests_project      entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
+                                los tests de Python
     -tn  | --tests_npm          entra al contenedor de vue y ejecuta        (docker exec -it...npm run test)
                                 los tests npm
-    -pg  | --shell_postgres     accede al contenedor de PostgreSQL          (docker exec -it)
-    -neo | --shell_neo4j        accede al contenedor de Neo4j               (docker exec -it)
+
+    -sp  | --shell_project      accede al contenedor del proyecto           (docker exec -it)
+    -sd  | --shell_postgres     accede al contenedor de PostgreSQL          (docker exec -it)
+    -sn  | --shell_neo4j        accede al contenedor de Neo4j               (docker exec -it)
+
     -s   | --stop               detiene los contenedores                    (docker-compose down)
     ${NC}
     "
@@ -70,7 +72,7 @@ start_build()
 
 docker_list()
 {
-    echo "${GREEN}Lista los contenedores por Imagen Estado y Puestos${NC}";
+    echo "${GREEN}Lista los contenedores por Nombre, Estado y Puestos${NC}";
     docker ps --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
 }
 
@@ -93,13 +95,11 @@ proyect_migrate()
     docker exec -it djangofull /bin/bash -c "django-migrate";
 }
 
-# Comentado hasta que se agregue la ejecución de tests en Vue
-# una vez hecho se debe ajustar el comando para ejecutar los test
-# tests_npm()
-# {
-#     echo "${GREEN}Ejecutando los tests NPM VUE del proyecto ${NC}";
-#     docker exec -it djangofull-vue npm run test;
-# }
+tests_npm()
+{
+    echo "${GREEN}Ejecutando los tests NPM VUE del proyecto ${NC}";
+    docker exec -it djangofull-vue npm run test:unit;
+}
 
 shell_postgres()
 {
@@ -138,10 +138,10 @@ while [ "$1" != "" ]; do
         -db  | --start_build )      start_build
                                     exit
                                     ;;
-        -p   | --shell_project )    shell_project
+        -sp   | --shell_project )    shell_project
                                     exit
                                     ;;
-        -pt  | --tests_project )    tests_project
+        -tp  | --tests_project )    tests_project
                                     exit
                                     ;;
         -pm  | --proyect_migrate )  proyect_migrate
@@ -150,13 +150,13 @@ while [ "$1" != "" ]; do
         -dl  | --docker_list )      docker_list
                                     exit
                                     ;;
-#         -tn  | --tests_npm )        tests_npm
-#                                     exit
-#                                     ;;
-        -pg  | --shell_postgres )   shell_postgres
+        -tn  | --tests_npm )        tests_npm
                                     exit
                                     ;;
-        -neo | --shell_neo4j )      shell_neo4j
+        -sd  | --shell_postgres )   shell_postgres
+                                    exit
+                                    ;;
+        -sn  | --shell_neo4j )      shell_neo4j
                                     exit
                                     ;;
         -s   | --stop )             stop
