@@ -10,11 +10,12 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Feature
 - [Descripción.](https://github.com/saengate/djfullapp/pull/#)
 
-## [0.3.0] - 2020-07-03
+## [0.3.0] - 2020-07-07
 ### Feature
 - [Configura el registro de logs con colores y agrega comandos shell para el uso del projecto.](https://github.com/saengate/djfullapp/pull/17)
 - [Agrega `Poetry` como manejador de paquetes en remplazo del `requirements.txt`.](https://github.com/saengate/djfullapp/pull/18)
 - [Agrega `django-easy-audit` como manejador de auditoria del proyecto.](https://github.com/saengate/djfullapp/pull/19)
+- [Agrega a `Vue.js` los test `Jest`, commandos para su ejecución, mejora el modo producción.](https://github.com/saengate/djfullapp/pull/20)
 
 ## [0.2.0] - 2020-07-01
 ### Feature
