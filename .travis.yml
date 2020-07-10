@@ -18,7 +18,7 @@ before_script:
 # Si este script falla puede deberse a que se cambio la raiz o el nombre del proyecto en el dockerfile
 script:
   - docker exec -it djangofull /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
-#   - docker exec djangofull-vue npm run test -- --coverage
+  - docker exec -it djangofull-vue npm run test:unit
 
 after_script:
   - docker-compose down

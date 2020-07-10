@@ -10,7 +10,7 @@ El rol ha sido modificado pero partio desde ese repositorio.
 Puede ejecutar  para facilitar el uso del proyecto:
 Para ejecutar el comando debe estar dentro de la carpeta contenedora de cada contanedor.
 ```sh
-./cmd -h
+./cmdn -h | cmdn -h
 ```
 ```sh
     -h  | * | --help   muestran los comandos disponibles

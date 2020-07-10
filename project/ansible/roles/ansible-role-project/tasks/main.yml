@@ -48,16 +48,12 @@
       group: "{{ group }}"
 
   - name: Valida que el directorio del proyecto no esta vacio
-    find:
-      paths: "{{ home }}/{{ project_name }}"
+    stat: path="{{ home }}/{{ project_name }}"
     register: home_proyect
 
   - name: Mover directorio si no existe el volumen
-    copy:
-      src: /tmp/project
-      dest: "{{ home }}"
-      force: no
-    when: home_proyect.matched == 0
+    command: mv /tmp/project "{{ home }}"
+    when: home_proyect.stat.exists == false
 
   - name: Creando archivo de log para el projecto
     file:
@@ -68,9 +64,8 @@
   - name: Instalar requerimientos de {{ project_name }}
     pip:
       requirements: /tmp/requirements.txt
-      virtualenv: /opt/venv
+      virtualenv: "{{ path_venv }}"
       virtualenv_python: python3
-      # executable: pip3
       extra_args: --no-cache-dir
 
 - block:
@@ -96,12 +91,12 @@
       - airflow-scheduler
       - airflow-server
       - airflow-queue
-      - create-admin
-      - entrypoint
-      - log-project
-      - log-supervisor
-      - log-websocket
-
+      - django-migrate
+      - django-messages
+      - cmdp
+      - venv
+      - runsupervisor
+      - wait-for-it
 
   - name: Inicializa variable programas
     set_fact:
@@ -131,7 +126,7 @@
   - name: Supervisor | Update configuration (supervisor.conf)
     template:
       src: supervisord.conf.j2
-      dest: "/etc/supervisord.conf"
+      dest: "/etc/supervisor/supervisord.conf"
       owner: root
       group: root
       mode: 0644

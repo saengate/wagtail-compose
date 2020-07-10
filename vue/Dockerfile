@@ -1,14 +1,26 @@
 # etapa de compilación
-FROM node:13.10.1-alpine3.10 as base-develop
+FROM node:13.10.1-alpine3.10 as base-test
 WORKDIR /app
-COPY ./djfullapp-vue ./
-WORKDIR /app/djfullapp-vue
-RUN npm install
-WORKDIR /app
-RUN npm run test
 
-# etapa de producción
-FROM nginx:1.13.12-alpine as prod
-COPY --from=base-develop /app /usr/share/nginx/html
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY ./djfullapp-vue/package*.json ./
+RUN npm install
+RUN npm audit fix
+
+COPY ./djfullapp-vue /app/
+
+WORKDIR /app/djfullapp-vue
+RUN npm run test:unit
+
+
+FROM node:13.10.1-alpine3.10 as base-develop
+COPY --from=base-test /app /app
+ENV PATH /app/node_modules/.bin:$PATH
+
+WORKDIR /app/djfullapp-vue
 EXPOSE 80
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+COPY ./scripts/entrypoint.sh /tmp/
+ENTRYPOINT ["sh", "/tmp/entrypoint.sh"]

@@ -32,12 +32,23 @@ services:
       - 7687:7687
       - 25:22
 
-  vue:
+  vue:  # docker-compose run vue
     build:
       context: ./vue
       dockerfile: Dockerfile
-      target: prod
+      target: base-develop
     container_name: djangofull-vue
+    deploy:
+      resources:
+        limits:
+            cpus: '0.50'
+            memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+    volumes:
+      - './vue/djfullapp-vue:/app/djfullapp-vue'
+      - '/app/node_modules'
     ports:
       - 80:80
 
@@ -59,9 +70,10 @@ services:
       - ./project/ansible:/tmp/ansible
     ports:
       - 23:22
-      - 8000:80
-      - 8001:8080
-      - 5050:5555
+      - 7000:80
+      - 7001:8080
+      - 7002:5555
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
+    command: wait-for-it db:5432 -- django-migrate

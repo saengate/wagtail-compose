@@ -2,7 +2,7 @@ FROM nginx:stable as base-develop
 
 RUN apt-get update
 RUN apt-get install -y python3-pip python3-venv python3-dev openssh-server openssh-client
-RUN apt-get install -y nano supervisor libpq-dev curl apt-utils
+RUN apt-get install -y nano curl supervisor libpq-dev apt-utils gettext
 RUN pip3 install --upgrade pip
 RUN pip3 install ansible virtualenv
 
@@ -19,23 +19,30 @@ RUN bash -c "ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev
 RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 RUN chmod og-wx ~/.ssh/authorized_keys
 
+# Install poetry y asegura que se instale el virtual en dentro de `path_venv`variable definida en ansible
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+ENV PATH="$PATH:/root/.poetry/bin"
+
 # Environment Variables
 ENV AIRFLOW_HOME=/usr/local/airflow
 
 WORKDIR /tmp
 
 COPY ./ansible ./ansible
-COPY ./requirements.txt ./
+COPY ./pyproject.toml ./
 COPY ./scripts/entrypoint.sh ./
 COPY ./ ./project
 
-EXPOSE 22 80 5555 8080
+RUN sed -i 's|#!/usr/bin/env python|#!/usr/bin/env python3|g' ~/.poetry/bin/poetry
+
+WORKDIR /tmp/project
+RUN poetry export --without-hashes -f requirements.txt -o /tmp/requirements.txt --dev
 
 WORKDIR /tmp/ansible
 RUN service ssh start && ssh-keyscan -H localhost >> ~/.ssh/known_hosts && ansible-playbook config-project.yml
-
 # Directorio del proyecto, debe modificarse si se cambia el directorio original
 # Su cambio provocara un fallo en travis
 WORKDIR /webapps/project
+EXPOSE 22 80 5555 8080
 
 ENTRYPOINT ["bash", "/tmp/entrypoint.sh"]

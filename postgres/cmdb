@@ -7,4 +7,4 @@ description_ports="
         5432    postgresql
         24      ssh
 "
-source $(pwd $0)/../cmd-container-template
+source $(dirname $0)/../cmd-container-template

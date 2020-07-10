@@ -112,3 +112,4 @@ venv.bak/
 
 #database
 project/neo4j/
+project/poetry.lock

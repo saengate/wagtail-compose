@@ -3,10 +3,15 @@ Plantilla para proyecto django
 
 ## Desarrollo
 
+No olvides recargar los paquetes de python en caso de que agregues nuevas librerias.
+```sh
+poetry lock
+```
+
 Puede ejecutar  para facilitar el uso del proyecto:
 Para ejecutar el comando debe estar dentro de la carpeta contenedora de cada contanedor.
 ```sh
-./cmd -h
+./cmdp -h | cmdp -h
 ```
 ```sh
 -h  | * | --help   muestran los comandos disponibles
@@ -26,7 +31,38 @@ Para ejecutar el comando debe estar dentro de la carpeta contenedora de cada con
                                             especificado
 -vv | --vault_view    [ dev | qa | prod ]   Muestra los valores del ambiente especificado   (ansible-vault view)
 ```
+
+Dentro del contenedor existen otros comandos que puede facilitar el trabajo del desarrollo, estos son:
+
+```sh
+cmdp -h
+```
+```sh
+-h  | * | --help   muestran los comandos disponibles
+
+-rs | --restart-supervisor      Reinicia supervisor y las configuraciones de los programas
+-rn | --restart-nginx           Reinicia Nginx
+-ra | --restart-all             Reiniciar supervisor las configuraciones de los programas y Nginx
+-ca | --create-admin            Crea el usuario administrador por defecto de la aplicación
+-t  | --translate               Prepara las traducciones en django
+-lp | --log-project             Muestra los logs del projecto y uwsgi
+-ls | --log-supervisor          Muestra los logs de supervisor
+-lw | --log-websocket           Muestra los logs del websocket
+```
+      - logproject
+      - logsupervisor
+      - logwebsocket
+      - createadmin
+Adicionalmente puedes ejecutar este comando para entrar al entorno virtual del projecto
+```sh
+source venv
+```
+
 ## Notas
+
+Este repositorio usa [poetry](https://pypi.org/project/poetry/) para la instalación de sus dependencias.
+
+Se pueden crear distribución pip siguiendo las instrucciones del siguiente [link](https://randomwalk.in/python/bash/2020/01/19/PoetryPackaging.html)
 
 Algunas de los siguientes comandos ya han sido incluidos en el comando "cmd"
 Levantar este contenedor especificamente.

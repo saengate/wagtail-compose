@@ -1,0 +1,120 @@
+#!/bin/bash
+#-*- ENCODING: UTF-8 -*-
+
+
+# Num  Colour    #define         R G B
+# 0    black     COLOR_BLACK     0,0,0
+# 1    red       COLOR_RED       1,0,0
+# 2    green     COLOR_GREEN     0,1,0
+# 3    yellow    COLOR_YELLOW    1,1,0
+# 4    blue      COLOR_BLUE      0,0,1
+# 5    magenta   COLOR_MAGENTA   1,0,1
+# 6    cyan      COLOR_CYAN      0,1,1
+# 7    white     COLOR_WHITE     1,1,1
+
+NC=`tput sgr0`
+RED=`tput setaf 1`
+GREEN=`tput setaf 2`
+CYAN=`tput setaf 6`
+container=vue
+container_ports='-p 80:80'
+description_ports="
+        80      vue
+"
+memory=50m
+
+help()
+{
+    echo "${CYAN}
+    Ayuda: Comandos de ayuda para facilitar el uso del proyecto:
+    Abre los puertos:
+        $description_ports
+
+    -h  | * | --help   muestran los comandos disponibles
+
+    -b  | --build           construye el contenedor                         (docker build)
+    -r  | --run             inicia y accede al contenedor                   (docker run -it)
+    -rv | --run_v           inicia y accede al contenedor y agrega          (docker run -it)
+                            volumenes para permitir la edición interactiva
+    -bt | --build_tes       construye contenedor para ejecutar pruebas      (docker build -it)
+    -rt | --run_test        inicia y ejecuta las pruebas de vue             (docker run -it...npm run test)
+
+    -rp | --run_prod        inicia y accede al contenedor en modo           (docker build && run -it)
+                            producción
+    ${NC}
+    ${RED}Recuerda estar dentro de la carpeta del contenedor $container antes de ejecutar estos comandos ${NC}
+    "
+}
+
+build()
+{
+    echo "${GREEN}Contruyendo imagen a partir del dockerfile para $container ${NC}";
+    docker build --no-cache --target base-develop -t $container .
+}
+
+run()
+{
+    echo "${GREEN}Iniciando contenedor $container ${NC}";
+    docker run --memory $memory --memory-swap $memory $container_ports --rm -it --name $container $container;
+}
+
+run_v()
+{
+    echo "${GREEN}Inciando contenedor $container con volumen para ver cambios dinamicamente ${NC}";
+    docker run --memory $memory --memory-swap $memory -v $(pwd)/djfullapp-vue:/app/djfullapp-vue -v /app/node_modules $container_ports --rm -it --name $container $container;
+}
+
+build_test()
+{
+    echo "${GREEN}Construyendo contenedor $container para pruebas ${NC}";
+    docker build --no-cache --target base-test -t $container .
+}
+
+run_test()
+{
+    echo "${GREEN}Iniciando contenedor $container ${NC}";
+    docker run -v $(pwd)/djfullapp-vue:/app/djfullapp-vue -v /app/node_modules --rm -it --name $container $container npm run test:unit;
+}
+
+run_prod()
+{
+    echo "${GREEN}Inciando prueba de contenedor $container en modo Producción ${NC}";
+    docker build -f Dockerfile.prod --no-cache -t vue . \
+    && docker run -p 80:80 --rm -it --name vue vue;
+}
+
+
+if [ "$1" == "" ]; then
+    help
+    exit 1
+fi
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -b  | --build )         build
+                                exit
+                                ;;
+        -r  | --run )           run
+                                exit
+                                ;;
+        -rv | --run_v )         run_v
+                                exit
+                                ;;
+        -rp | --run_prod )      run_prod
+                                exit
+                                ;;
+        -bt | --build_test )    build_test
+                                exit
+                                ;;
+        -rt | --run_test )      run_test
+                                exit
+                                ;;
+        -h  | --help )          help
+                                exit
+                                ;;
+        * )                     help
+                                exit 1
+    esac
+    shift
+done
+
