@@ -44,6 +44,7 @@ cmdp -h
 -rn | --restart-nginx           Reinicia Nginx
 -ra | --restart-all             Reiniciar supervisor las configuraciones de los programas y Nginx
 -ca | --create-admin            Crea el usuario administrador por defecto de la aplicación
+-t  | --translate               Prepara las traducciones en django
 -lp | --log-project             Muestra los logs del projecto y uwsgi
 -ls | --log-supervisor          Muestra los logs de supervisor
 -lw | --log-websocket           Muestra los logs del websocket
@@ -54,7 +55,7 @@ cmdp -h
       - createadmin
 Adicionalmente puedes ejecutar este comando para entrar al entorno virtual del projecto
 ```sh
-source venvproject
+source venv
 ```
 
 ## Notas

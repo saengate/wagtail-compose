@@ -73,7 +73,7 @@ start_build()
 docker_list()
 {
     echo "${GREEN}Lista los contenedores por Nombre, Estado y Puestos${NC}";
-    docker ps --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
+    docker ps --filter "name=djangofull" --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
 }
 
 shell_project()

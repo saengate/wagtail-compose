@@ -21,4 +21,6 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 WORKDIR /app/djfullapp-vue
 EXPOSE 80
-ENTRYPOINT ["npm", "run", "serve", "--", "--port", "80"]
+
+COPY ./scripts/entrypoint.sh /tmp/
+ENTRYPOINT ["sh", "/tmp/entrypoint.sh"]

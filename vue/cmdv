@@ -21,6 +21,7 @@ container_ports='-p 80:80'
 description_ports="
         80      vue
 "
+memory=50m
 
 help()
 {
@@ -54,13 +55,13 @@ build()
 run()
 {
     echo "${GREEN}Iniciando contenedor $container ${NC}";
-    docker run $container_ports --rm -it --name $container $container;
+    docker run --memory $memory --memory-swap $memory $container_ports --rm -it --name $container $container;
 }
 
 run_v()
 {
     echo "${GREEN}Inciando contenedor $container con volumen para ver cambios dinamicamente ${NC}";
-    docker run -v $(pwd)/djfullapp-vue:/app/djfullapp-vue -v /app/node_modules $container_ports --rm -it --name $container $container;
+    docker run --memory $memory --memory-swap $memory -v $(pwd)/djfullapp-vue:/app/djfullapp-vue -v /app/node_modules $container_ports --rm -it --name $container $container;
 }
 
 build_test()

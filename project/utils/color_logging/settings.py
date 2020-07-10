@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
-
 try:
     from termcolor import colored
 except ImportError:
@@ -34,22 +32,22 @@ except ImportError:
 
 # See detail in log in the order if is True
 details = dict(
-    gname = [False, 0, '%(name)s'], 
-    glevelno = [False, 0, '%(levelno)s'],
-    glevelname = [True, 2, '%(levelname)s'],
-    gpathname = [False, 0, '%(pathname)s'],
-    gfilename = [False, 0, '%(filename)s'],
-    gmodule = [True, 3, '[%(module)s]'],
-    glineno = [False, 0, '%(lineno)d'],
+    gname=[False, 0, '%(name)s'],
+    glevelno=[False, 0, '%(levelno)s'],
+    glevelname=[True, 2, '%(levelname)s'],
+    gpathname=[False, 0, '%(pathname)s'],
+    gfilename=[False, 0, '%(filename)s'],
+    gmodule=[True, 3, '[%(module)s]'],
+    glineno=[False, 0, '%(lineno)d'],
     gfuncName=[True, 4, colored('[%(funcName)s]\n', 'cyan')],
-    gcreated = [False, 0, '%(created)f'],
-    gasctime = [True, 1, '%(asctime)s'],
-    gmsecs = [False, 0, '%(msecs)d'],
-    grelativeCreated = [False, 0, '%(relativeCreated)d'],
-    gthread = [False, 0, '%(thread)d'],
-    gthreadName = [False, 0, '%(threadName)s'],
-    gprocess = [False, 0, '%(process)d'],
-    gmessage = [True, 5, '%(message)s']
+    gcreated=[False, 0, '%(created)f'],
+    gasctime=[True, 1, '%(asctime)s'],
+    gmsecs=[False, 0, '%(msecs)d'],
+    grelativeCreated=[False, 0, '%(relativeCreated)d'],
+    gthread=[False, 0, '%(thread)d'],
+    gthreadName=[False, 0, '%(threadName)s'],
+    gprocess=[False, 0, '%(process)d'],
+    gmessage=[True, 5, '%(message)s'],
 )
 
 delimit = ' - '
@@ -60,6 +58,6 @@ delimit = ' - '
 # el color_logging.
 
 try:
-    from local_settings import *
+    from local_settings import *  # NOQA
 except ImportError:
     pass

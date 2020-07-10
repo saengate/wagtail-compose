@@ -19,8 +19,10 @@ Fecha: 26-04-2019
 """
 import logging
 
-from logging.handlers import RotatingFileHandler
-from utils.color_logging.settings import *
+from utils.color_logging.settings import (
+    details,
+    delimit,
+)
 
 try:
     from termcolor import colored
@@ -61,6 +63,7 @@ class NewLogger(logging.Logger):
             extra,
         )
 
+
 def formatter():
 
     try:
@@ -69,7 +72,7 @@ def formatter():
     except IndexError:
         raise AssertionError(
             'Los valores del details en setting son correctos.')
-        
+
     lstr = ''
     i = 0
     for orden in dets:
