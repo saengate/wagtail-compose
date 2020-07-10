@@ -32,12 +32,20 @@ services:
       - 7687:7687
       - 25:22
 
-  vue:
+  vue:  # docker-compose run vue
     build:
       context: ./vue
       dockerfile: Dockerfile
       target: base-develop
     container_name: djangofull-vue
+    deploy:
+      resources:
+        limits:
+            cpus: '0.50'
+            memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
     volumes:
       - './vue/djfullapp-vue:/app/djfullapp-vue'
       - '/app/node_modules'

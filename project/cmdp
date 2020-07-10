@@ -2,7 +2,7 @@
 #-*- ENCODING: UTF-8 -*-
 
 container=project
-container_ports='-p 23:22 -p 8000:80 -p 5050:5555 -p 8001:8080'
+container_ports='-p 23:22 -p 7000:80 -p 7001:8080 -p 7002:5555'
 description_ports="
         80      nginx
         5555    flower

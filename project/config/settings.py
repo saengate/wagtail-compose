@@ -13,9 +13,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 from os import getenv
+from rest_framework import compat
 
 from utils.color_logging import formatter
 
+# I have the same issue, but poetry does not allow me to update Markdown to from 2.6.11 to 3+
+# because apache-airflow (1.10.10) depends on markdown (>=2.5.2,<3.0)
+compat.md_filter_add_syntax_highlight = lambda md: False
 
 ENVIRONMENT = 'develop'
 
@@ -54,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -63,6 +68,22 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.DjangoModelPermissions',
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly,
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+}
+
 
 TEMPLATES = [
     {
@@ -75,6 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -86,13 +108,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-""" 
+"""
 'default': {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-} 
+}
 """
-# https://pypi.org/project/django_neomodel/
+# https://pypi.org/project/django_neomodel/
 
 NEOMODEL_NEO4J_BOLT_URL = 'bolt://neo4j:neo4j@djangofull-neo4j:7687'
 NEOMODEL_SIGNALS = True
@@ -131,10 +153,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# django-admin makemessages -a && django-admin compilemessages
 
 TIME_ZONE = 'UTC'
 
@@ -144,14 +175,20 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+LANGUAGE_CODE = 'es-cl'
+# LANGUAGE_CODE = 'en-us'
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
+_ = lambda s: s  # NOQA
+
+LANGUAGES = [
+    ('es', _('Espanish')),
+    ('en', _('English')),
+]
+
 
 # ==============================================================================
 # WEBSOCKETS & CHANNELS
@@ -161,7 +198,7 @@ ASGI_APPLICATION = 'config.routing.application'
 
 REDIS_HOST = getenv('REDIS_HOST', 'redis://redis:6379')
 
-# # It is possible to have multiple channel layers configured.
+# It is possible to have multiple channel layers configured.
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -178,27 +215,28 @@ HOSTS = {
 
 WS_ALLOWED_HOSTS = ['*'] if DEBUG else HOSTS[ENVIRONMENT]
 
+
 # LOGS
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters' : {
-        'standard' : {
-            'format' : formatter(),
+    'formatters': {
+        'standard': {
+            'format': formatter(),
         },
     },
     'handlers': {
         'file': {
-            'level' : 'INFO',
-            'class' : 'logging.handlers.RotatingFileHandler',
-            'filename' : '/var/log/project/project.log',
-            'maxBytes' : 1024*1024*10, # 10MB
-            'backupCount' : 5,
-            'formatter' : 'standard',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/project/project.log',
+            'maxBytes': 1024*1024*10,  # 10MB
+            'backupCount': 5,
+            'formatter': 'standard',
         },
         'console': {
             'class': 'logging.StreamHandler',
-            'formatter' : 'standard',
+            'formatter': 'standard',
         },
     },
     'loggers': {
@@ -231,22 +269,22 @@ DJANGO_EASY_AUDIT_WATCH_AUTH_EVENTS = True
 DJANGO_EASY_AUDIT_WATCH_REQUEST_EVENTS = True
 
 # DJANGO_EASY_AUDIT_UNREGISTERED_CLASSES_EXTRA = ['app_name.model_name']
-# DJANGO_EASY_AUDIT_UNREGISTERED_URLS_EXTRA = ['url']
+# DJANGO_EASY_AUDIT_UNREGISTERED_URLS_EXTRA = ['url']
 # DJANGO_EASY_AUDIT_CRUD_DIFFERENCE_CALLBACKS = ['string-paths-to-functions-classes']
 
 # This is reserved for future use (does not do anything yet) 1.2.2
-# DJANGO_EASY_AUDIT_USER_DB_CONSTRAINT = 'default'
+# DJANGO_EASY_AUDIT_USER_DB_CONSTRAINT = 'default'
 
-# DJANGO_EASY_AUDIT_CRUD_EVENT_LIST_FILTER = ['event_type', 'content_type', 'user', 'datetime', ] 
-# DJANGO_EASY_AUDIT_LOGIN_EVENT_LIST_FILTER = ['login_type', 'user', 'datetime', ]
-# DJANGO_EASY_AUDIT_REQUEST_EVENT_LIST_FILTER = ['method', 'user', 'datetime', ]
+# DJANGO_EASY_AUDIT_CRUD_EVENT_LIST_FILTER = ['event_type', 'content_type', 'user', 'datetime', ] 
+# DJANGO_EASY_AUDIT_LOGIN_EVENT_LIST_FILTER = ['login_type', 'user', 'datetime', ]
+# DJANGO_EASY_AUDIT_REQUEST_EVENT_LIST_FILTER = ['method', 'user', 'datetime', ]
 
-# DJANGO_EASY_AUDIT_DATABASE_ALIAS = 'default '
+# DJANGO_EASY_AUDIT_DATABASE_ALIAS = 'default '
 
-# No guarda auditoria si no han ocurrido cambios
+# No guarda auditoria si no han ocurrido cambios
 DJANGO_EASY_AUDIT_CRUD_EVENT_NO_CHANGED_FIELDS_SKIP = True
 
 # Solo lectura impide que un superusuario los modifique
 DJANGO_EASY_AUDIT_READONLY_EVENTS = True
 
-# DJANGO_EASY_AUDIT_LOGGING_BACKEND = 'easyaudit.backends.ModelBackend'
+# DJANGO_EASY_AUDIT_LOGGING_BACKEND = 'easyaudit.backends.ModelBackend'

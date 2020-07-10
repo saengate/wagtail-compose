@@ -92,8 +92,9 @@
       - airflow-server
       - airflow-queue
       - django-migrate
+      - django-messages
       - cmdp
-      - venvproject
+      - venv
       - runsupervisor
       - wait-for-it
 
