@@ -144,6 +144,59 @@ En la configuración de ansible puede buscar la palabra ".key" y comentar la lin
 la contraseña en un archivo y así asignar una contraseña nueva y guardarla en algún lugar seguro.
 
 
+### USar y Obtener actualziaciones desde la plantilla.
+
+En gitHub crea un repositorio desde el template de `djfullapp`, para poder obtener los cambios que se generen en el template se deben realizar varias acciones que son importantes comprender.
+
+#### Preparar rama para recibir actualizaciones
+
+- Clona `djfullapp` y desde la rama `master` crea una rama con el mismo nombre del nuevo repositorio (por razones practicas) en este caso será `blog`, esta rama no se empujará a `GIT` así que no será visible en el repositorio de `djfullapp`, tu repositorio privado permanece privado.
+
+```sh
+git fetch origin
+git checkout master
+git branch -b blog
+```
+
+#### Control de versiones en mi nuevo repositorio
+
+- Se creo un proyecto usando el template, para este ejemplo es `blog` (desde github).
+- Además agrego un nuevo repositorio remoto a `djfullapp` que apunta a ese nuevo repositorio.
+
+```sh
+git remote add blog https://github.com/saengate/blog.git
+```
+ 
+`Nota intermedia`: Aquí se pone interesante, usando las propiedades de git las actualizaciones de `djfullapp` que quiero empujar en `blog` los realizo dentro de esta rama, por lo que esta rama será la branch intermedio de estos proyectos.
+
+
+- `Ten cuidado aquí`: Y empuja la rama `blog` dentro del nuevo proyecto cambiando origin por blog:
+
+```sh
+git push blog blog
+```
+
+- En Github asigna esta rama como la rama principal del proyecto, recuerda que debes hacerlo en el settings de ese repositorio github.
+
+#### Actualizar BLOG con los nuevas versiones de DJFULLAPP
+
+Desde el proyecto `djfullapp` los cambios hacia esta nueva rama se empujan con los siguientes comandos:
+
+Ten cuidado con los comandos que ejecutes aquí, un mal paso puede reescribir el repositorio equivocado.
+También recuerda que origin apunta a `djfullapp` y `blog`, bueno a `blog`.
+- Cambia a la rama intermediaria `git checkout blog`.
+- Actualiza rama intermedia con los cambios que hayas realizado `git pull blog blog`.
+- Actualiza la rama `master` de `djfullapp`: `git pull origin master`.
+- Mezcla los cambios de `djfullapp` en `blog`:
+```sh
+git checkout blog
+git rebase master
+git push blog blog
+```
+Tendrás que lidiar con algunos conflictos, pero no deberían ser demasiados. Tal vez todos asociados a la carpeta `ses`.
+No borres la rama intermedia, `blog` para este caso.
+
+
 ## Errores conocidos
 
 ### Supervisor
