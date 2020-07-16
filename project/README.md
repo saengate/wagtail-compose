@@ -67,18 +67,18 @@ Se pueden crear distribución pip siguiendo las instrucciones del siguiente [lin
 Algunas de los siguientes comandos ya han sido incluidos en el comando "cmd"
 Levantar este contenedor especificamente.
 ```sh
-docker build -t  djangofull .
-docker run -p 23:22 -p 8000:80 -p 5050:5555 -p 8001:8080 -it --rm --name djangofull saengate/djfullapp
+docker build -t  djfullapp .
+docker run -p 23:22 -p 8000:80 -p 5050:5555 -p 8001:8080 -it --rm --name djfullapp saengate/djfullapp
 ```
 
 Levantar contenedor con volumen de ansible y el proyecto
 ```sh
-docker run -v $(pwd)/ansible:/tmp/ansible -v $(pwd):/webapps/project -p 23:22 -p 8000:80 -p 5050:5555 -p 8001:8080 --rm -it --name djangofull djangofull
+docker run -v $(pwd)/ansible:/tmp/ansible -v $(pwd):/webapps/project -p 23:22 -p 8000:80 -p 5050:5555 -p 8001:8080 --rm -it --name djfullapp djfullapp
 ```
 
 Levantar contenedor con volumen de ansible
 ```sh
-docker run -v $(pwd)/ansible:/tmp/ansible -p 23:22 -p 8000:80 -p 5050:5555 -p 8001:8080 --rm -it --name djangofull djangofull
+docker run -v $(pwd)/ansible:/tmp/ansible -p 23:22 -p 8000:80 -p 5050:5555 -p 8001:8080 --rm -it --name djfullapp djfullapp
 ```
 
 Para validar que los servicios estan arriba al usar docker
