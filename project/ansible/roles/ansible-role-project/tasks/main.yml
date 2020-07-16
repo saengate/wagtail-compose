@@ -48,12 +48,15 @@
       group: "{{ group }}"
 
   - name: Valida que el directorio del proyecto no esta vacio
-    stat: path="{{ home }}/{{ project_name }}"
+    find:
+      paths: "{{ home }}/{{ project_name }}"
+      file_type: directory
+      patterns: "*"
     register: home_proyect
 
   - name: Mover directorio si no existe el volumen
     command: mv /tmp/project "{{ home }}"
-    when: home_proyect.stat.exists == false
+    when: home_proyect.matched|int == 0
 
   - name: Creando archivo de log para el projecto
     file:

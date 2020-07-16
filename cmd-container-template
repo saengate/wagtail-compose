@@ -22,6 +22,7 @@ RED=`tput setaf 1`
 GREEN=`tput setaf 2`
 CYAN=`tput setaf 6`
 env=
+force=
 
 help()
 {
@@ -32,7 +33,7 @@ help()
 
     -h  | * | --help   muestran los comandos disponibles
 
-    -b  | --build           construye el contenedor                         (docker build)
+    -b  | --build (arg -f ) construye el contenedor, -f = --no-cache        (docker build)
     -r  | --run             inicia y accede al contenedor                   (docker run -it)
     -rv | --run_v           inicia y accede al contenedor y agrega          (docker run -it)
                             el volumen para los cambios en ansible
@@ -71,7 +72,11 @@ default_env()
 build()
 {
     echo "${GREEN}Contruyendo imagen a partir del dockerfile para $container ${NC}";
-    docker build --no-cache -t $container .;
+    if [ "$1" == "-f" ]; then
+        docker build --no-cache -t $container .;
+    else
+        docker build -t $container .;
+    fi
 }
 
 run()
@@ -125,7 +130,7 @@ fi
 
 while [ "$1" != "" ]; do
     case $1 in
-        -b | --build )          build
+        -b | --build )          build $2
                                 exit
                                 ;;
         -r | --run )            run

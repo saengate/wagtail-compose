@@ -11,7 +11,7 @@ RUN npm audit fix
 
 COPY ./djfullapp-vue /app/
 
-WORKDIR /app/djfullapp-vue
+WORKDIR /app/vue
 RUN npm run test:unit
 
 
@@ -19,7 +19,8 @@ FROM node:13.10.1-alpine3.10 as base-develop
 COPY --from=base-test /app /app
 ENV PATH /app/node_modules/.bin:$PATH
 
-WORKDIR /app/djfullapp-vue
+COPY ./djfullapp-vue/ /app/vue
+WORKDIR /app/vue
 EXPOSE 80
 
 COPY ./scripts/entrypoint.sh /tmp/

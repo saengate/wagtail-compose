@@ -24,6 +24,125 @@ Solo debe tenerse cuidado en los contenedores si se cambian los puertos.
 Debes tener instalado docker y ansible en tu equipo, se dejan arriba los links para su instalación.
 Instalar Ansible sera necesario para modificar las contraseñas encryptadas.
 
+En este momento es recomendable descargar directo desde el [repositorio GitHub](https://github.com/saengate/djfullapp), sin embargo dejo documentado las instrucciones para montar las imágenes con docker-compose:
+
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **En este momento hay dos errores, uno en el archivo ansible que copia la carpeta /tmp/project al home del contenedor djfullapp y otro en el `command` de docker-compose para el servicio web que no esta disparando la ejecución de las migraciones**
+
+Deja el volumen comentado la primera vez que levantes el proyecto y luego copia el contenido desde el contenedor a tu carpeta de desarrollo:
+
+```sh
+docker-compose up --build
+docker cp djfullapp:/tmp/project ./project
+docker cp djfullapp-vue:/app/djfullapp-vue ./vue
+docker cp {contenedor}:{/root/ansible}
+docker cp djfullapp:/tmp/ansible ./project
+docker-compose down
+```
+
+Descomenta las lineas de volumen para enlazar el contenedor con tu desarrollo y vuelve a levantar los contenedores
+```sh
+docker-compose up
+```
+
+Ejemplo `docker-compose.yml`
+```yml
+version: '3.7'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: djfullapp-redis
+
+  db:
+    image: saengate/djfullapp:postgres
+    container_name: djfullapp-db
+    restart: always
+    tty: true
+#    volumes:
+#      - postgres:/var/lib/postgresql/11/main
+#      - ./postgres/ansible:/root/ansible
+    ports:
+      - 5432:5432
+
+  neo4j:
+    image: saengate/djfullapp:neo4j
+    container_name: djfullapp-neo4j
+    restart: always
+    tty: true
+#    volumes:
+#      - neo4j:/data
+#      - ./neo4j/ansible:/root/ansible
+    ports:
+      - 7473:7473
+      - 7474:7474
+      - 7687:7687
+
+  vue:
+    image: saengate/djfullapp:vue
+    container_name: djfullapp-vue
+    deploy:
+      resources:
+        limits:
+            cpus: '0.50'
+            memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+#    volumes:
+#      - ./vue:/app/vue
+#      - /app/node_modules
+    ports:
+      - 80:80
+
+  web:
+    image: saengate/djfullapp:project
+    container_name: djfullapp
+    restart: always
+    tty: true
+    depends_on:
+      - redis
+      - db
+      - neo4j
+      - vue
+    ports:
+      - 7000:80
+      - 7001:8080
+      - 7002:5555
+#    volumes:
+#      - ./project:/webapps/project
+#      - ./project/ansible:/tmp/ansible
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    command: wait-for-it db:5432 -- django-migrate
+
+#volumes:
+#  postgres:
+#    driver: local-persist
+#    driver_opts:
+#      mountpoint: ${PWD}/data/postgres
+#  neo4j:
+#    driver: local-persist
+#    driver_opts:
+#      mountpoint: ${PWD}/data/neo4j
+```
+
+#### Data persistente en las Bases de datos (Postgres y Neo4j)
+
+Para lograr esto se propone hacer uso del repositorio [Local Persist Volume Plugin for Docker](https://github.com/MatchbookLab/local-persist)
+
+Para Mas OS debe serguir las siguientes instrucciones:
+
+```sh
+docker run -d --rm \
+  -v /run/docker/plugins/:/run/docker/plugins/ \
+  -v $(pwd)/:/var/lib/docker/plugin-data/ \
+  -v $(pwd)/data/:$(pwd)/data/ \
+  --name local-persist \
+  cwspear/docker-local-persist-volume-plugin
+  /bin/bash
+```
+
 ### Librerias de terceros
 
 [django-easy-audit](https://github.com/soynatan/django-easy-audit) Es una aplicación de auditoria de fácil uso que he incluido en este projecto. De momento, estará en evaluación y si cumple con las espectativas se volverá parte del proyecto. Todas las instrucciones de uso se encuentran en la descripción de dicho proyecto (Realmente parece que no requiere de ninguna interacción en los modelos, así que al ser prácticamente innecesaria la interacción del desarrollador para su ejecución se evita que por olvido no se monitoree algún modelo, simplemente genial).
@@ -66,6 +185,8 @@ Se agrega el comando "cmd" para facilitar el uso del proyecto y su interacción 
                             Puestos
 
 -pm  | --proyect_migrate    ejecuta las migraciones en el proyecto      (docker exec -it...django-migrate)
+-ca  | --create-admin       crea el usuario administrador por defecto   (docker exec -it...createsuperuser)
+                            de la aplicación
 
 -tp  | --tests_project      entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
                             los tests de Python

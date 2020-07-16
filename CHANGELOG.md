@@ -10,6 +10,14 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Feature
 - [Descripción.](https://github.com/saengate/djfullapp/pull/#)
 
+## [0.4.0] - 2020-07-16
+### Added
+- [Agrega forma de enviar el readme a dockerhub desde travis.](https://github.com/saengate/djfullapp/pull/24)
+- [Agrega documentación y ejemplos para crear volumenes persistentes para las bases de datos.](https://github.com/saengate/djfullapp/pull/24)
+- [Cambia el nombre de los contenedores para que coincidan con el proyecto.](https://github.com/saengate/djfullapp/pull/24)
+### Fixed
+- [Corrige la ejecución del wait-for-it y ejecuta las migraciones desde docker-compose.](https://github.com/saengate/djfullapp/pull/24)
+
 ## [0.3.0] - 2020-07-07
 ### Feature
 - [Configura el registro de logs con colores y agrega comandos shell para el uso del projecto.](https://github.com/saengate/djfullapp/pull/17)

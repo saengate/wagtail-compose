@@ -1,8 +1,8 @@
 FROM nginx:stable as base-develop
 
-RUN apt-get update
-RUN apt-get install -y python3-pip python3-venv python3-dev openssh-server openssh-client
-RUN apt-get install -y nano curl supervisor libpq-dev apt-utils gettext
+RUN apt-get update -q
+RUN apt-get install -qy python3-pip python3-venv python3-dev openssh-server openssh-client
+RUN apt-get install -y nano curl supervisor libpq-dev apt-utils gettext netcat apt-utils
 RUN pip3 install --upgrade pip
 RUN pip3 install ansible virtualenv
 
@@ -30,7 +30,6 @@ WORKDIR /tmp
 
 COPY ./ansible ./ansible
 COPY ./pyproject.toml ./
-COPY ./scripts/entrypoint.sh ./
 COPY ./ ./project
 
 RUN sed -i 's|#!/usr/bin/env python|#!/usr/bin/env python3|g' ~/.poetry/bin/poetry
@@ -45,4 +44,14 @@ RUN service ssh start && ssh-keyscan -H localhost >> ~/.ssh/known_hosts && ansib
 WORKDIR /webapps/project
 EXPOSE 22 80 5555 8080
 
-ENTRYPOINT ["bash", "/tmp/entrypoint.sh"]
+# Se sobreescribe en el docker-compose.yml para ejecutar las migraciones
+CMD [   "bash",                         \
+        "-c",                           \
+        "service supervisor start &&    \
+        supervisorctl reread &&         \
+        supervisorctl update &&         \
+        supervisorctl start all &&      \
+        service ssh start &&            \
+        service nginx start &&          \
+        /bin/bash"                      \
+    ]
