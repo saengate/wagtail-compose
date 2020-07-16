@@ -2,14 +2,14 @@ version: '3.7'
 services:
   redis:
     image: redis:latest
-    container_name: djangofull-redis
+    container_name: djfullapp-redis
 
   db:
     build:
       context: ./postgres
       dockerfile: Dockerfile
       target: base-develop
-    container_name: djangofull-db
+    container_name: djfullapp-db
     restart: always
     tty: true
     ports:
@@ -21,7 +21,7 @@ services:
       context: ./neo4j
       dockerfile: Dockerfile
       target: base-develop
-    container_name: djangofull-neo4j
+    container_name: djfullapp-neo4j
     restart: always
     tty: true
     ports:
@@ -35,7 +35,7 @@ services:
       context: ./vue
       dockerfile: Dockerfile.prod
       target: prod
-    container_name: djangofull-vue
+    container_name: djfullapp-vue
     ports:
       - 80:80
 
@@ -44,7 +44,7 @@ services:
       context: ./project
       dockerfile: Dockerfile
       target: base-develop
-    container_name: djangofull
+    container_name: djfullapp
     restart: always
     tty: true
     depends_on:

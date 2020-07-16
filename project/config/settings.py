@@ -116,7 +116,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 """
 # https://pypi.org/project/django_neomodel/
 
-NEOMODEL_NEO4J_BOLT_URL = 'bolt://neo4j:neo4j@djangofull-neo4j:7687'
+NEOMODEL_NEO4J_BOLT_URL = 'bolt://neo4j:neo4j@djfullapp-neo4j:7687'
 NEOMODEL_SIGNALS = True
 NEOMODEL_FORCE_TIMEZONE = False
 NEOMODEL_ENCRYPTED_CONNECTION = True
@@ -125,10 +125,10 @@ NEOMODEL_MAX_POOL_SIZE = 50
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'djangofulldb',
+        'NAME': 'djfullappdb',
         'USER': 'userdb',
         'PASSWORD': 'password',
-        'HOST': 'djangofull-db',
+        'HOST': 'djfullapp-db',
         'PORT': '5432',
     }
 }

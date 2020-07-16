@@ -30,6 +30,8 @@ help()
                                 Puestos
 
     -pm  | --proyect_migrate    ejecuta las migraciones en el proyecto      (docker exec -it...django-migrate)
+    -ca  | --create-admin       crea el usuario administrador por defecto   (docker exec -it...createsuperuser)
+                                de la aplicación
 
     -tp  | --tests_project      entra al contenedor del proyecto y ejecuta  (docker exec -it.../manage.py test)
                                 los tests de Python
@@ -73,44 +75,51 @@ start_build()
 docker_list()
 {
     echo "${GREEN}Lista los contenedores por Nombre, Estado y Puestos${NC}";
-    docker ps --filter "name=djangofull" --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
+    docker ps --filter "name=djfullapp" --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
 }
 
 shell_project()
 {
     echo "${GREEN}Ingresando al contendedor del proyecto${NC}";
-    docker exec -it djangofull /bin/bash;
+    docker exec -it djfullapp /bin/bash;
 }
 
 tests_project()
 {
     echo "${GREEN}Ejecutando los tests PYTHON del proyecto${NC}";
-    docker exec -it djangofull /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test";
+    docker exec -it djfullapp /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test";
 }
 
 proyect_migrate()
 {
     echo "${GREEN}Ejecutando las migraciones DJANGO ${NC}";
     echo "${RED}Recuerde que debe tener la base de datos funcionando ${NC}";
-    docker exec -it djangofull /bin/bash -c "django-migrate";
+    docker exec -it djfullapp /bin/bash -c "django-migrate";
+}
+
+createadmin()
+{
+    echo "${GREEN}Creando administrador django${NC}";
+    echo "${RED}Requiere que la base de datos este arriba${NC}";
+    docker exec -it djfullapp /bin/bash -c "source /opt/venv/bin/activate && ./manage.py createsuperuser";
 }
 
 tests_npm()
 {
     echo "${GREEN}Ejecutando los tests NPM VUE del proyecto ${NC}";
-    docker exec -it djangofull-vue npm run test:unit;
+    docker exec -it djfullapp-vue npm run test:unit;
 }
 
 shell_postgres()
 {
     echo "${GREEN}Ingresando al contendedor de postgres${NC}";
-    docker exec -it djangofull-db /bin/bash;
+    docker exec -it djfullapp-db /bin/bash;
 }
 
 shell_neo4j()
 {
     echo "${GREEN}Ingresando al contendedor de neo4j${NC}";
-    docker exec -it djangofull-neo4j /bin/bash;
+    docker exec -it djfullapp-neo4j /bin/bash;
 }
 
 stop()
@@ -145,6 +154,9 @@ while [ "$1" != "" ]; do
                                     exit
                                     ;;
         -pm  | --proyect_migrate )  proyect_migrate
+                                    exit
+                                    ;;
+        -ca | --create-admin )      createadmin
                                     exit
                                     ;;
         -dl  | --docker_list )      docker_list
