@@ -10,6 +10,10 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Feature
 - [Descripción.](https://github.com/saengate/djfullapp/pull/#)
 
+## [0.4.1] - 2020-07-16
+### Fixed
+- [Agrega a travis un script para enviar a dockerhub el readme del proyecto.](https://github.com/saengate/djfullapp/pull/27)
+
 ## [0.4.0] - 2020-07-16
 ### Added
 - [Agrega forma de enviar el readme a dockerhub desde travis.](https://github.com/saengate/djfullapp/pull/24)

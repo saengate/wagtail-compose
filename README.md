@@ -26,9 +26,7 @@ Instalar Ansible sera necesario para modificar las contraseñas encryptadas.
 
 En este momento es recomendable descargar directo desde el [repositorio GitHub](https://github.com/saengate/djfullapp), sin embargo dejo documentado las instrucciones para montar las imágenes con docker-compose:
 
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **En este momento hay dos errores, uno en el archivo ansible que copia la carpeta /tmp/project al home del contenedor djfullapp y otro en el `command` de docker-compose para el servicio web que no esta disparando la ejecución de las migraciones**
-
-Deja el volumen comentado la primera vez que levantes el proyecto y luego copia el contenido desde el contenedor a tu carpeta de desarrollo:
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **Deja el volumen comentado la primera vez que levantes el proyecto y luego copia el contenido desde el contenedor a tu carpeta de desarrollo**
 
 ```sh
 docker-compose up --build
