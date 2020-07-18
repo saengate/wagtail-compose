@@ -217,7 +217,11 @@ Se pueden ejecutar las pruebas de python usando el comando:
 ```sh
 ./cmd -tp | --tests_python
 ```
-Aún están por agregarse las pruebas en vue
+
+Se pueden ejecutar las pruebas de node usando el comando:
+```sh
+./cmd -tn | --tests_npm
+```
 
 ### Deploy de una nueva versión.
 
@@ -263,7 +267,7 @@ En la configuración de ansible puede buscar la palabra ".key" y comentar la lin
 la contraseña en un archivo y así asignar una contraseña nueva y guardarla en algún lugar seguro.
 
 
-### USar y Obtener actualziaciones desde la plantilla.
+### Usar y obtener actualziaciones desde la plantilla.
 
 En gitHub crea un repositorio desde el template de `djfullapp`, para poder obtener los cambios que se generen en el template se deben realizar varias acciones que son importantes comprender.
 
@@ -315,6 +319,15 @@ git push blog blog
 Tendrás que lidiar con algunos conflictos, pero no deberían ser demasiados. Tal vez todos asociados a la carpeta `ses`.
 No borres la rama intermedia, `blog` para este caso.
 
+#### Enviar README.md a dockerhub
+
+```sh
+export DOCKERHUB_USERNAME="usuario";
+export DOCKERHUB_PASSWORD="contraseña";
+export DOCKERHUB_REPO_PREFIX="usuario_o_prefijo_en_docker_hub";
+export DOCKERHUB_REPO_NAME="repositorio";
+docker run --rm -v "$(pwd)/:/data/:ro" -e "DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME" -e "DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD" -e "DOCKERHUB_REPO_PREFIX=$DOCKERHUB_REPO_PREFIX" -e "DOCKERHUB_REPO_NAME=$DOCKERHUB_REPO_NAME" sheogorath/readme-to-dockerhub;
+```
 
 ## Errores conocidos
 
@@ -324,10 +337,10 @@ No borres la rama intermedia, `blog` para este caso.
 unix:///var/run/supervisor.sock no such file
 ```
 
-En ocasiones necesitaras reiniciar el servicio, y verás este error,  el problema se debe a que hace falta carga 
-cada vez las configuraciones de supervisor, el comando es simple pero para simplificar la tarea ejecuta el siguiente
+En ocasiones necesitaras reiniciar el servicio y verás este error, el problema se debe a que hace falta cargar
+`cada vez` las configuraciones de supervisor, el comando es simple pero para simplificar la tarea ejecuta el siguiente
 comando que carga las configuraciones y refresta todo el entorno supervisor. (Si quieres conocer los detalles,
-revisa el archivo en ansible template dentro del projecto o en /usr/local/bin/runsupervisor)
+revisa el archivo en ansible template o dentro del projecto o en /usr/local/bin/runsupervisor).
 
 ```sh
 runsupervisor

@@ -1,5 +1,4 @@
-static/
-
-#database
-db-postgres/*
-neo4j/*
+static/*
+staticfiles/*
+media/*
+!*/.gitkeep
