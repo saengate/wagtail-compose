@@ -17,8 +17,12 @@ RUN bash -c "ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev
 RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 RUN chmod og-wx ~/.ssh/authorized_keys
 
-COPY ./ansible /root/ansible
 COPY ./scripts/entrypoint.sh /opt/scripts/
+
+WORKDIR /tmp
+COPY ./ansible ./ansible
+WORKDIR /tmp/ansible
+RUN service ssh start && ssh-keyscan -H localhost >> ~/.ssh/known_hosts && ansible-playbook config-postgres.yml
 
 EXPOSE 5432 22
 

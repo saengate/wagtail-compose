@@ -32,8 +32,7 @@ En este momento es recomendable descargar directo desde el [repositorio GitHub](
 docker-compose up --build
 docker cp djfullapp:/tmp/project ./project
 docker cp djfullapp-vue:/app/djfullapp-vue ./vue
-docker cp {contenedor}:{/root/ansible}
-docker cp djfullapp:/tmp/ansible ./project
+docker cp {contenedor}:{/tmp/ansible} ${PWD}/{nombre-carpeta-destino}  # Que coincida con el volumen de cada contenedor
 docker-compose down
 ```
 
@@ -58,7 +57,7 @@ services:
     tty: true
 #    volumes:
 #      - postgres:/var/lib/postgresql/11/main
-#      - ./postgres/ansible:/root/ansible
+#      - ./postgres/ansible:/tmp/ansible
     ports:
       - 5432:5432
 
@@ -69,7 +68,7 @@ services:
     tty: true
 #    volumes:
 #      - neo4j:/data
-#      - ./neo4j/ansible:/root/ansible
+#      - ./neo4j/ansible:/tmp/ansible
     ports:
       - 7473:7473
       - 7474:7474
