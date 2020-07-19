@@ -17,12 +17,16 @@ RUN bash -c "ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev
 RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 RUN chmod og-wx ~/.ssh/authorized_keys
 
-COPY ./ansible /root/ansible
 COPY ./scripts/entrypoint.sh /opt/scripts/
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH=$PATH:/usr/share/neo4j/bin:/usr/lib/jvm/java-11-openjdk-amd64/bin
 ENV NEO4J_HOME=/usr/share/neo4j
+
+WORKDIR /tmp
+COPY ./ansible ./ansible
+WORKDIR /tmp/ansible
+RUN service ssh start && ssh-keyscan -H localhost >> ~/.ssh/known_hosts && ansible-playbook config-neo4j.yml
 
 EXPOSE 7687 7474 7473 22
 

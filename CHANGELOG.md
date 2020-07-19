@@ -10,6 +10,10 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Feature
 - [Descripción.](https://github.com/saengate/djfullapp/pull/#)
 
+## [0.4.3] - 2020-07-19
+### Fixed
+- [Mueve ansible del entrypoin al dockerfile para acelerar el inicio del contenedor.](https://github.com/saengate/djfullapp/pull/30)
+
 ## [0.4.2] - 2020-07-18
 ### Fixed
 - [Cambia el nombre de los archivos README para subirlo en dockerhub desde travis.](https://github.com/saengate/djfullapp/pull/28)
