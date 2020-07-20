@@ -1,5 +1,0 @@
----
-- hosts: develop
-  roles:
-    - { role: ANXS.postgresql }
-...

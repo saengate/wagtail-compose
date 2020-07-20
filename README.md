@@ -30,7 +30,7 @@ En este momento es recomendable descargar directo desde el [repositorio GitHub](
 
 ```sh
 docker-compose up --build
-docker cp djfullapp:/tmp/project ./project
+docker cp djfullapp:/tmp/django ./django
 docker cp djfullapp-vue:/app/djfullapp-vue ./vue
 docker cp {contenedor}:{/tmp/ansible} ${PWD}/{nombre-carpeta-destino}  # Que coincida con el volumen de cada contenedor
 docker-compose down
@@ -92,7 +92,7 @@ services:
       - 80:80
 
   web:
-    image: saengate/djfullapp:project
+    image: saengate/djfullapp:django
     container_name: djfullapp
     restart: always
     tty: true
@@ -106,8 +106,8 @@ services:
       - 7001:8080
       - 7002:5555
 #    volumes:
-#      - ./project:/webapps/project
-#      - ./project/ansible:/tmp/ansible
+#      - ./django:/webapps/django
+#      - ./django/ansible:/tmp/ansible
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
@@ -156,7 +156,7 @@ de entorno en tu OS.
 export PROJECT="/dir/path/djfullapp"
 alias cds="$PROJECT"
 alias cmd="$PROJECT/cmd"
-alias cmdp="$PROJECT/project/cmdp"
+alias cmdp="$PROJECT/django/cmdp"
 alias cmdn="$PROJECT/neo4j/cmdn"
 alias cmdb="$PROJECT/postgres/cmdb"
 alias cmdv="$PROJECT/vue/cmdv"
@@ -248,16 +248,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
 
 Para validar que los servicios estan arriba al usar docker
 ```sh
-nmap 0.0.0.0 -p 23 | grep -i tcp
-nmap 0.0.0.0 -p 24 | grep -i tcp
-nmap 0.0.0.0 -p 25 | grep -i tcp
-nmap 0.0.0.0 -p 80 | grep -i tcp
-nmap 0.0.0.0 -p 5432 | grep -i tcp
-nmap 0.0.0.0 -p 5555 | grep -i tcp
-nmap 0.0.0.0 -p 7473 | grep -i tcp
-nmap 0.0.0.0 -p 7474 | grep -i tcp
-nmap 0.0.0.0 -p 7687 | grep -i tcp
-nmap 0.0.0.0 -p 8001 | grep -i tcp
+nmap 0.0.0.0 -p 23,24,25,80,5432,5555,7473,7474,7687,8001 | grep -i tcp
 ```
 
 Cada contenedor contiene una llave para el Vault de ansible, debe ingresar a cada uno y revisar
