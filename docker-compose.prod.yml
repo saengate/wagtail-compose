@@ -41,7 +41,7 @@ services:
 
   web:
     build:
-      context: ./project
+      context: ./django
       dockerfile: Dockerfile
       target: base-develop
     container_name: djfullapp

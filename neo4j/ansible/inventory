@@ -1,8 +1,0 @@
-[develop]
-localhost ansible_connection=local
-
-[qa]
-localhost ansible_connection=local
-
-[production]
-localhost ansible_connection=local

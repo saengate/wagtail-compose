@@ -1,9 +1,0 @@
----
-# Basic settings
-neo4j_server_database_location: /data
-neo4j_connector_bolt_port: 7687
-neo4j_connector_http_port: 7474
-neo4j_connector_https_port: 7473
-neo4j_prometheus_metrics_enabled: true
-neo4j_prometheus_metrics_endpoint: localhost:2004
-...

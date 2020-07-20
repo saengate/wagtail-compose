@@ -56,7 +56,7 @@ services:
 
   web:
     build:
-      context: ./project
+      context: ./django
       dockerfile: Dockerfile
       target: base-develop
     container_name: djfullapp
@@ -68,8 +68,8 @@ services:
       - neo4j
       - vue
 #    volumes:
-#      - ./project:/webapps/project
-#      - ./project/ansible:/tmp/ansible
+#      - ./django:/webapps/django
+#      - ./django/ansible:/tmp/ansible
     ports:
       - 7000:80
       - 7001:8080
