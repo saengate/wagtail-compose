@@ -10,6 +10,10 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Feature
 - [Descripción.](https://github.com/saengate/djfullapp/pull/#)
 
+## [0.5.0] - 2020-07-20
+### Feature
+- [Agrega como submodulos las carpetas `neo4j`, `postgres`, `vue` y `django`.](https://github.com/saengate/djfullapp/pull/31)
+
 ## [0.4.3] - 2020-07-19
 ### Fixed
 - [Mueve ansible del entrypoin al dockerfile para acelerar el inicio del contenedor.](https://github.com/saengate/djfullapp/pull/30)
