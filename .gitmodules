@@ -1,6 +1,6 @@
 [submodule "postgres"]
 	path = postgres
-	url = git@github.com:saengate/wagtail-postgres.git
+	url = https://github.com/saengate/wagtail-postgres.git
 [submodule "django"]
 	path = django
-	url = git@github.com:saengate/wagtail-blog.git
+	url = https://github.com/saengate/wagtail-blog.git
