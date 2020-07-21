@@ -1,12 +1,6 @@
-[submodule "neo4j"]
-	path = neo4j
-	url = https://github.com/saengate/neo4j.git
 [submodule "postgres"]
 	path = postgres
-	url = https://github.com/saengate/postgres.git
-[submodule "vue"]
-	path = vue
-	url = https://github.com/saengate/vue.git
+	url = git@github.com:saengate/wagtail-postgres.git
 [submodule "django"]
 	path = django
-	url = https://github.com/saengate/django.git
+	url = git@github.com:saengate/wagtail-blog.git

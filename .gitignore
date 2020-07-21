@@ -111,7 +111,7 @@ venv.bak/
 .DS_Store
 
 data/
-project/poetry.lock
+django/poetry.lock
 
 local-persist.json
 

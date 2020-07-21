@@ -1,9 +1,20 @@
-[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/saengate/djfullapp)](https://github.com/saengate/djfullapp/releases/latest)
-[![GitHub](https://img.shields.io/github/license/saengate/djfullapp)](LICENSE)
-[![GitHub contributors](https://img.shields.io/github/contributors/saengate/djfullapp)](https://github.com/saengate/djfullapp/graphs/contributors)
-[![Build Status](https://travis-ci.org/saengate/djfullapp.svg?branch=master)](https://travis-ci.org/saengate/djfullapp)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/saengate/wagtail-compose)](https://github.com/saengate/wagtail-compose/releases/latest)
+[![GitHub](https://img.shields.io/github/license/saengate/wagtail-compose)](LICENSE)
+[![GitHub contributors](https://img.shields.io/github/contributors/saengate/wagtail-compose)](https://github.com/saengate/wagtail-compose/graphs/contributors)
+[![Build Status](https://travis-ci.org/saengate/wagtail-compose.svg?branch=master)](https://travis-ci.org/saengate/wagtail-compose)
 
-# DJFULLAPP
+# BLOG (extendido de DJFULLAPP)
+
+## README BLOG
+Usa [wagtail](https://wagtail.io/)
+https://docs.wagtail.io/en/stable/advanced_topics/add_to_django_project.html
+
+## Descripción
+
+Crear una blog personal usando `wagtail`.
+
+
+# README Extendido de DJFULLAPP
 
 ### Imagen de Django 2.2/Vue CLI v4.4 con Nginx (Supervisor-Daphne), PostgreSQL, Neo4j y Apache Airflow.
 

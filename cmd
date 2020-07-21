@@ -75,51 +75,51 @@ start_build()
 docker_list()
 {
     echo "${GREEN}Lista los contenedores por Nombre, Estado y Puestos${NC}";
-    docker ps --filter "name=djfullapp" --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
+    docker ps --filter "name=wagtail" --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
 }
 
 shell_project()
 {
     echo "${GREEN}Ingresando al contendedor del proyecto${NC}";
-    docker exec -it djfullapp /bin/bash;
+    docker exec -it wagtail /bin/bash;
 }
 
 tests_project()
 {
     echo "${GREEN}Ejecutando los tests PYTHON del proyecto${NC}";
-    docker exec -it djfullapp /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test";
+    docker exec -it wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test";
 }
 
 proyect_migrate()
 {
     echo "${GREEN}Ejecutando las migraciones DJANGO ${NC}";
     echo "${RED}Recuerde que debe tener la base de datos funcionando ${NC}";
-    docker exec -it djfullapp /bin/bash -c "django-migrate";
+    docker exec -it wagtail /bin/bash -c "django-migrate";
 }
 
 createadmin()
 {
     echo "${GREEN}Creando administrador django${NC}";
     echo "${RED}Requiere que la base de datos este arriba${NC}";
-    docker exec -it djfullapp /bin/bash -c "source /opt/venv/bin/activate && ./manage.py createsuperuser";
+    docker exec -it wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py createsuperuser";
 }
 
 tests_npm()
 {
     echo "${GREEN}Ejecutando los tests NPM VUE del proyecto ${NC}";
-    docker exec -it djfullapp-vue npm run test:unit;
+    docker exec -it wagtail-vue npm run test:unit;
 }
 
 shell_postgres()
 {
     echo "${GREEN}Ingresando al contendedor de postgres${NC}";
-    docker exec -it djfullapp-db /bin/bash;
+    docker exec -it wagtail-db /bin/bash;
 }
 
 shell_neo4j()
 {
     echo "${GREEN}Ingresando al contendedor de neo4j${NC}";
-    docker exec -it djfullapp-neo4j /bin/bash;
+    docker exec -it wagtail-neo4j /bin/bash;
 }
 
 stop()
