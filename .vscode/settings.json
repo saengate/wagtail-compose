@@ -1,0 +1,13 @@
+{
+    "terminal.explorerKind": "external",
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": [
+        "--enable=W0614"
+    ],
+    "python.linting.flake8Args": [
+        "--max-line-length=100",
+    ],
+    "python.pythonPath": "/usr/bin/python3",
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": false,
+}

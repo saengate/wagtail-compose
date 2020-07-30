@@ -43,6 +43,8 @@ help()
     -sn  | --shell_neo4j        accede al contenedor de Neo4j               (docker exec -it)
 
     -s   | --stop               detiene los contenedores                    (docker-compose down)
+    -lp  | --local_persist      Para desarrollo inicia un contenedor docker (docker run local-persist)
+                                con local persistencia
     ${NC}
     "
 }
@@ -128,6 +130,18 @@ stop()
     docker-compose down;
 }
 
+local_persist()
+{
+    docker run -d --rm \
+    -v /run/docker/plugins/:/run/docker/plugins/ \
+    -v $(pwd)/:/var/lib/docker/plugin-data/ \
+    -v $(pwd)/data/:$(pwd)/data/ \
+    --name local-persist \
+    cwspear/docker-local-persist-volume-plugin
+    /bin/bash
+}
+
+
 if [ "$1" == "" ]; then
     help
     exit 1
@@ -172,6 +186,9 @@ while [ "$1" != "" ]; do
                                     exit
                                     ;;
         -s   | --stop )             stop
+                                    exit
+                                    ;;
+        -lp  | --local_persist )    local_persist
                                     exit
                                     ;;
         -h   | --help )             help

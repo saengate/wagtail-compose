@@ -206,6 +206,9 @@ Se agrega el comando "cmd" para facilitar el uso del proyecto y su interacción 
 -sn  | --shell_neo4j        accede al contenedor de Neo4j               (docker exec -it)
 
 -s   | --stop               detiene los contenedores                    (docker-compose down)
+
+-lp  | --local_persist      Para desarrollo inicia un contenedor docker (docker run local-persist)
+                            con local persistencia
 ```
 
 ### Librerias (pip requirements.txt y poetry)

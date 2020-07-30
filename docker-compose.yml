@@ -12,11 +12,32 @@ services:
     container_name: wagtail-db
     restart: always
     tty: true
-#    volumes:
-#      - postgres:/var/lib/postgresql/11/main  # base de datos persistente
+    volumes:
+      # - postgres:/var/lib/postgresql/11/main  # usar cuando se inicia por primera vez
+      - ./data/postgres:/var/lib/postgresql/11/main
     ports:
       - 5432:5432
       - 24:22
+
+  vue:
+    build:
+      context: ./vue
+      dockerfile: Dockerfile
+      target: base-develop
+    container_name: wagtail-vue
+    deploy:
+      resources:
+        limits:
+            cpus: '0.50'
+            memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+    volumes:
+      - ./vue/wagtail-vue:/app/vue
+      - /app/node_modules
+    ports:
+      - 80:80
 
   web:
     build:
@@ -29,13 +50,15 @@ services:
     depends_on:
       - redis
       - db
+      - vue
     volumes:
       - ./django:/webapps/django
       - ./django/ansible:/tmp/ansible
     ports:
-      - 80:80
+      - 7000:80
       - 7001:8080
       - 7002:5555
+      - 7003:7000  # ./manage.py runserver
       - 23:22
     environment:
       - NGINX_HOST=localhost
@@ -50,6 +73,7 @@ services:
              wait-for-it db:5432 --strict --timeout=60 -- django-migrate &&
              /bin/bash"
 
+# usar cuando se inicia por primera vez
 #volumes:
 #  postgres:
 #    driver: local-persist

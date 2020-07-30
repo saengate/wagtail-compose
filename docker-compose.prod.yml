@@ -16,6 +16,15 @@ services:
       - 5432:5432
       - 24:22
 
+  vue:
+    build:
+      context: ./vue
+      dockerfile: Dockerfile.prod
+      target: prod
+    container_name: wagtail-vue
+    ports:
+      - 80:80
+
   web:
     build:
       context: ./django
@@ -27,7 +36,6 @@ services:
     depends_on:
       - redis
       - db
-      - neo4j
       - vue
     ports:
       - 23:22
