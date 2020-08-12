@@ -23,7 +23,6 @@ services:
     build:
       context: ./vue
       dockerfile: Dockerfile
-      target: base-develop
     container_name: wagtail-vue
     deploy:
       resources:
@@ -55,11 +54,12 @@ services:
       - ./django:/webapps/django
       - ./django/ansible:/tmp/ansible
     ports:
+      - 23:22
       - 7000:80
       - 7001:8080
       - 7002:5555
       - 7003:7000  # ./manage.py runserver
-      - 23:22
+      - 7004:7001  # ./manage.py shell_plus --notebook
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
