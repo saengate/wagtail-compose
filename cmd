@@ -11,12 +11,11 @@
 # 6    cyan      COLOR_CYAN      0,1,1
 # 7    white     COLOR_WHITE     1,1,1
 
-NC=`tput sgr0`
-GREEN=`tput setaf 2`
-CYAN=`tput setaf 6`
+NC=$(tput sgr0)
+GREEN=$(tput setaf 2)
+CYAN=$(tput setaf 6)
 
-help()
-{
+help() {
     echo "${CYAN}
     Ayuda: Comandos de ayuda para facilitar el uso del proyecto:
 
@@ -39,164 +38,134 @@ help()
                                 los tests npm
 
     -sp  | --shell_project      accede al contenedor del proyecto           (docker exec -it)
-    -sd  | --shell_postgres     accede al contenedor de PostgreSQL          (docker exec -it)
-    -sn  | --shell_neo4j        accede al contenedor de Neo4j               (docker exec -it)
 
-    -s   | --stop               detiene los contenedores                    (docker-compose down)
-    -lp  | --local_persist      Para desarrollo inicia un contenedor docker (docker run local-persist)
-                                con local persistencia
+    -s   | --stop               detiene y si se pasa true destruye los      (docker-compose down)
+                                contenedores
     ${NC}
     "
 }
 
-
-daemon()
-{
-    echo "${GREEN}Iniciando proyecto como demonio${NC}";
-    docker-compose up -d --remove-orphans;
+daemon() {
+    echo "${GREEN}Iniciando proyecto como demonio${NC}"
+    docker-compose up -d --remove-orphans
 }
 
-daemon_build()
-{
-    echo "${GREEN}Contruir e iniciar proyecto como demonio${NC}";
-    docker-compose up --build -d --remove-orphans;
+daemon_build() {
+    echo "${GREEN}Contruir e iniciar proyecto como demonio${NC}"
+    docker-compose up --build -d --remove-orphans
 }
 
-start()
-{
-    echo "${GREEN}Iniciando proyecto con detalle de logs (verbose mode)${NC}";
-    docker-compose up --remove-orphans;
+start() {
+    echo "${GREEN}Iniciando proyecto con detalle de logs (verbose mode)${NC}"
+    docker-compose up --remove-orphans
 }
 
-start_build()
-{
-    echo "${GREEN}Contruir e iniciar proyecto con detalle de logs (verbose mode)${NC}";
-    docker-compose up --build --remove-orphans;
+start_build() {
+    echo "${GREEN}Contruir e iniciar proyecto con detalle de logs (verbose mode)${NC}"
+    docker-compose up --build --remove-orphans
 }
 
-docker_list()
-{
-    echo "${GREEN}Lista los contenedores por Nombre, Estado y Puestos${NC}";
-    docker ps --filter "name=wagtail" --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}";
+docker_list() {
+    echo "${GREEN}Lista los contenedores por Nombre, Estado y Puestos${NC}"
+    docker ps --filter "name=wagtail" --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}"
 }
 
-shell_project()
-{
-    echo "${GREEN}Ingresando al contendedor del proyecto${NC}";
-    docker exec -it wagtail /bin/bash;
+shell_project() {
+    echo "${GREEN}Ingresando al contendedor del proyecto${NC}"
+    docker exec -it wagtail /bin/bash
 }
 
-tests_project()
-{
-    echo "${GREEN}Ejecutando los tests PYTHON del proyecto${NC}";
-    docker exec -it wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test";
+tests_project() {
+    echo "${GREEN}Ejecutando los tests PYTHON del proyecto${NC}"
+    docker exec -it wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
 }
 
-proyect_migrate()
-{
-    echo "${GREEN}Ejecutando las migraciones DJANGO ${NC}";
-    echo "${RED}Recuerde que debe tener la base de datos funcionando ${NC}";
-    docker exec -it wagtail /bin/bash -c "django-migrate";
+proyect_migrate() {
+    echo "${GREEN}Ejecutando las migraciones DJANGO ${NC}"
+    echo "${RED}Recuerde que debe tener la base de datos funcionando ${NC}"
+    docker exec -it wagtail /bin/bash -c "django-migrate"
 }
 
-createadmin()
-{
-    echo "${GREEN}Creando administrador django${NC}";
-    echo "${RED}Requiere que la base de datos este arriba${NC}";
-    docker exec -it wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py createsuperuser";
+createadmin() {
+    echo "${GREEN}Creando administrador django${NC}"
+    echo "${RED}Requiere que la base de datos este arriba${NC}"
+    docker exec -it wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py createsuperuser"
 }
 
-tests_npm()
-{
-    echo "${GREEN}Ejecutando los tests NPM VUE del proyecto ${NC}";
-    docker exec -it wagtail-vue npm run test:unit;
+tests_npm() {
+    echo "${GREEN}Ejecutando los tests NPM VUE del proyecto ${NC}"
+    docker exec -it wagtail-vue npm run test:unit
 }
 
-shell_postgres()
-{
-    echo "${GREEN}Ingresando al contendedor de postgres${NC}";
-    docker exec -it wagtail-db /bin/bash;
+stop() {
+    if [ "$1" == "true" ]; then
+        echo "${GREEN}Deteniendo y destruyendo los contenedores del proyecto${NC}"
+        docker-compose down
+    else
+        echo "${GREEN}Deteniendo los contenedores del proyecto${NC}"
+        docker-compose stop
+    fi
 }
-
-shell_neo4j()
-{
-    echo "${GREEN}Ingresando al contendedor de neo4j${NC}";
-    docker exec -it wagtail-neo4j /bin/bash;
-}
-
-stop()
-{
-    echo "${GREEN}Deteniendo proyecto${NC}";
-    docker-compose down;
-}
-
-local_persist()
-{
-    docker run -d --rm \
-    -v /run/docker/plugins/:/run/docker/plugins/ \
-    -v $(pwd)/:/var/lib/docker/plugin-data/ \
-    -v $(pwd)/data/:$(pwd)/data/ \
-    --name local-persist \
-    cwspear/docker-local-persist-volume-plugin
-    /bin/bash
-}
-
 
 if [ "$1" == "" ]; then
     help
     exit 1
 fi
 
-while [ "$1" != "" ]; do    
-    case $1 in  
-        -D   | --daemon )           daemon
-                                    exit
-                                    ;;
-        -DB  | --daemon_build )     daemon_build
-                                    exit
-                                    ;;
-        -d   | --start )            start
-                                    exit
-                                    ;;
-        -db  | --start_build )      start_build
-                                    exit
-                                    ;;
-        -sp   | --shell_project )    shell_project
-                                    exit
-                                    ;;
-        -tp  | --tests_project )    tests_project
-                                    exit
-                                    ;;
-        -pm  | --proyect_migrate )  proyect_migrate
-                                    exit
-                                    ;;
-        -ca | --create-admin )      createadmin
-                                    exit
-                                    ;;
-        -dl  | --docker_list )      docker_list
-                                    exit
-                                    ;;
-        -tn  | --tests_npm )        tests_npm
-                                    exit
-                                    ;;
-        -sd  | --shell_postgres )   shell_postgres
-                                    exit
-                                    ;;
-        -sn  | --shell_neo4j )      shell_neo4j
-                                    exit
-                                    ;;
-        -s   | --stop )             stop
-                                    exit
-                                    ;;
-        -lp  | --local_persist )    local_persist
-                                    exit
-                                    ;;
-        -h   | --help )             help
-                                    exit
-                                    ;;
-        * )                         help
-                                    exit 1
+while [ "$1" != "" ]; do
+    case $1 in
+    -D | --daemon)
+        daemon
+        exit
+        ;;
+    -DB | --daemon_build)
+        daemon_build
+        exit
+        ;;
+    -d | --start)
+        start
+        exit
+        ;;
+    -db | --start_build)
+        start_build
+        exit
+        ;;
+    -sp | --shell_project)
+        shell_project
+        exit
+        ;;
+    -tp | --tests_project)
+        tests_project
+        exit
+        ;;
+    -pm | --proyect_migrate)
+        proyect_migrate
+        exit
+        ;;
+    -ca | --create-admin)
+        createadmin
+        exit
+        ;;
+    -dl | --docker_list)
+        docker_list
+        exit
+        ;;
+    -tn | --tests_npm)
+        tests_npm
+        exit
+        ;;
+    -s | --stop)
+        stop $destruir
+        exit
+        ;;
+    -h | --help)
+        help
+        exit
+        ;;
+    *)
+        help
+        exit 1
+        ;;
     esac
     shift
 done
-
