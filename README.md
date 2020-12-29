@@ -165,9 +165,9 @@ nmap 0.0.0.0 -p 23,24,25,80,5432,5555,7473,7474,7687,8001 | grep -i tcp
 ```
 
 Cada contenedor contiene una llave para el Vault de ansible, debe ingresar a cada uno y revisar
-el archivo .key dentro de la carpeta ansible si desea cambiar las contraseñas.
+el archivo crea un archivo .key dentro de la carpeta ansible, si desea cambiar las contraseñas desencrypta los valores y vuelve a encryptar con una nueva llave.
 En la configuración de ansible puede buscar la palabra ".key" y comentar la linea para que no busque
-la contraseña en un archivo y así asignar una contraseña nueva y guardarla en algún lugar seguro.
+la contraseña en un archivo y así asignar una contraseña nueva y guardarla en algún lugar seguro. Esto puede tener efectos en la construcción del contenedor.
 
 
 ### Usar y obtener actualziaciones desde la plantilla.
