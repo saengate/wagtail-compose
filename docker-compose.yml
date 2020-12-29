@@ -45,7 +45,7 @@ services:
       - AWS_DEFAULT_REGION=${AWS_REGION}
       - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
       - AWS_CLOUDFRONT=${AWS_CLOUDFRONT}
-      - BASE_URL=0.0.0.0:7000
+      - BASE_URL=http://0.0.0.0:7000
     volumes:
       - ./vue:/app/vue
       - /app/vue/node_modules
@@ -70,15 +70,13 @@ services:
       - db
       - vue
     volumes:
-      - ./django:/webapps/django
+      - ./django:/webapps/wagtailblog
       - ./django/ansible:/tmp/ansible
+      - ./.env:/webapps/wagtailblog/.env
     ports:
-      - 23:22
-      - 7000:80 # backend
-      - 7001:8080 # Apache Airflow
-      - 7002:5555 # flower & celery
-      - 7003:7000 # ./manage.py runserver
-      - 7004:7001 # ./manage.py shell_plus --notebook
+      - 7000:80 # nginx
+      - 7001:7001 # ./manage.py shell_plus --notebook
+      - 7002:7002 # ./manage.py runserver
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
@@ -87,13 +85,16 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET}
       - AWS_DEFAULT_REGION=${AWS_REGION}
     command: >
-      sh -c "wait-for-it db:5432 --strict --timeout=60 -- django-migrate &&
-            poetry lock --no-update &&
-            poetry export -n --without-hashes -f requirements.txt -o ./requirements.txt &&
-            service supervisor start &&
-            supervisorctl reread &&
-            supervisorctl update &&
-            supervisorctl start all &&
-            service ssh start &&
-            service nginx start &&
-            bash"
+      sh -c "
+        wait-for-it db:5432 --strict --timeout=60 -- django-migrate &&
+        poetry lock --no-update &&
+        poetry export -n --without-hashes -f requirements.txt -o ./requirements.txt &&
+        echo 'set -a; source /webapps/wagtailblog/.env; set +a' >> /opt/venv/bin/postactivate &&
+        service supervisor start &&
+        supervisorctl reread &&
+        supervisorctl update &&
+        supervisorctl start all &&
+        service ssh start &&
+        service nginx start &&
+        bash
+      "
