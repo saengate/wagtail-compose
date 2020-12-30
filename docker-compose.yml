@@ -86,6 +86,7 @@ services:
       - AWS_DEFAULT_REGION=${AWS_REGION}
     command: >
       sh -c "
+        cp /root/zappa_settings.json /webapps/wagtailblog/zappa_settings.json &&
         wait-for-it db:5432 --strict --timeout=60 -- django-migrate &&
         poetry lock --no-update &&
         poetry export -n --without-hashes -f requirements.txt -o ./requirements.txt &&
