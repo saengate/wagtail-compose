@@ -7,7 +7,7 @@ services:
 
 env:
   global:
-  - "DOCKER_COMPOSE_VERSION=1.23.2"
+    - "DOCKER_COMPOSE_VERSION=1.23.2"
 
 before_install:
   - sudo apt-get -qq update
@@ -22,9 +22,8 @@ before_script:
 
 # Si este script falla puede deberse a que se cambio la raiz o el nombre del proyecto en el dockerfile
 script:
-  - docker exec -it wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
-  - docker exec -it wagtail-vue npm run test:unit
-
+  - docker-compose exec wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
+  - docker-compose exec wagtail-vue npm run test:unit
 
 after_script:
   - docker-compose down

@@ -35,9 +35,10 @@ services:
       context: ./vue
       dockerfile: Dockerfile
       args:
-        AWS_ACCESS: ${AWS_ACCESS_NUXT}
+        ANSIBLE_KEY: ${ANSIBLE_KEY}
         AWS_SECRET: ${AWS_SECRET_NUXT}
         AWS_REGION: ${AWS_REGION}
+        WS_REGION: ${AWS_REGION}
     container_name: wagtail-vue
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_NUXT}
