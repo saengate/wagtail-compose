@@ -18,8 +18,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 
 before_script:
-  - docker-compose up --build
-    -f docker-compose.yml.travis -d
+  - docker-compose -f docker-compose.yml.travis up --build -d
 
 # Si este script falla puede deberse a que se cambio la raiz o el nombre del proyecto en el dockerfile
 script:
