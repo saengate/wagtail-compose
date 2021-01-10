@@ -22,8 +22,8 @@ before_script:
 
 # Si este script falla puede deberse a que se cambio la raiz o el nombre del proyecto en el dockerfile
 script:
-  - docker-compose exec wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
-  - docker-compose exec wagtail-vue npm run test:unit
+  - docker-compose exec web /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
+  - docker-compose exec vue npm run test:unit
 
 after_script:
   - docker-compose down
