@@ -7,7 +7,7 @@ services:
 
 env:
   global:
-  - "DOCKER_COMPOSE_VERSION=1.23.2"
+    - "DOCKER_COMPOSE_VERSION=1.23.2"
 
 before_install:
   - sudo apt-get -qq update
@@ -18,11 +18,12 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 
 before_script:
-  - docker-compose up --build -d
+  - docker-compose -f docker-compose.yml.travis up --build -d
 
 # Si este script falla puede deberse a que se cambio la raiz o el nombre del proyecto en el dockerfile
 script:
-  - docker exec -it wagtail /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
+  - docker-compose exec web /bin/bash -c "source /opt/venv/bin/activate && ./manage.py test"
+  - docker-compose exec vue npm run test:unit
 
 after_script:
   - docker-compose down

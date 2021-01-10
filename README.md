@@ -16,7 +16,7 @@ Crear una blog personal usando `wagtail`.
 
 # README Extendido de DJFULLAPP
 
-### Imagen de Django 2.2/Vue CLI v4.4 con Nginx (Supervisor-Daphne), PostgreSQL, Neo4j y Apache Airflow.
+### Imagen de Django 3.1/Vue CLI v4.4 con Nginx (Supervisor-Daphne), PostgreSQL y Apache Airflow.
 
 ## Descripción
 
@@ -50,105 +50,6 @@ docker-compose down
 Descomenta las lineas de volumen para enlazar el contenedor con tu desarrollo y vuelve a levantar los contenedores
 ```sh
 docker-compose up
-```
-
-Ejemplo `docker-compose.yml`
-```yml
-version: '3.7'
-
-services:
-  redis:
-    image: redis:latest
-    container_name: djfullapp-redis
-
-  db:
-    image: saengate/djfullapp:postgres
-    container_name: djfullapp-db
-    restart: always
-    tty: true
-#    volumes:
-#      - postgres:/var/lib/postgresql/11/main
-#      - ./postgres/ansible:/tmp/ansible
-    ports:
-      - 5432:5432
-
-  neo4j:
-    image: saengate/djfullapp:neo4j
-    container_name: djfullapp-neo4j
-    restart: always
-    tty: true
-#    volumes:
-#      - neo4j:/data
-#      - ./neo4j/ansible:/tmp/ansible
-    ports:
-      - 7473:7473
-      - 7474:7474
-      - 7687:7687
-
-  vue:
-    image: saengate/djfullapp:vue
-    container_name: djfullapp-vue
-    deploy:
-      resources:
-        limits:
-            cpus: '0.50'
-            memory: 50M
-        reservations:
-          cpus: '0.25'
-          memory: 20M
-#    volumes:
-#      - ./vue:/app/vue
-#      - /app/node_modules
-    ports:
-      - 80:80
-
-  web:
-    image: saengate/djfullapp:django
-    container_name: djfullapp
-    restart: always
-    tty: true
-    depends_on:
-      - redis
-      - db
-      - neo4j
-      - vue
-    ports:
-      - 7000:80
-      - 7001:8080
-      - 7002:5555
-#    volumes:
-#      - ./django:/webapps/django
-#      - ./django/ansible:/tmp/ansible
-    environment:
-      - NGINX_HOST=localhost
-      - NGINX_PORT=80
-    command: wait-for-it db:5432 -- django-migrate
-
-#volumes:
-#  postgres:
-#    driver: local-persist
-#    driver_opts:
-#      mountpoint: ${PWD}/data/postgres
-#  neo4j:
-#    driver: local-persist
-#    driver_opts:
-#      mountpoint: ${PWD}/data/neo4j
-```
-
-#### Data persistente en las Bases de datos (Postgres y Neo4j)
-
-Para lograr esto se propone hacer uso del repositorio [Local Persist Volume Plugin for Docker](https://github.com/MatchbookLab/local-persist)
-
-Para Mas OS debe serguir las siguientes instrucciones:
-
-```sh
-docker run -d --rm \
-  -v /run/docker/plugins/:/run/docker/plugins/ \
-  -v $(pwd)/:/var/lib/docker/plugin-data/ \
-  -v $(pwd)/data/:$(pwd)/data/ \
-  --name local-persist \
-  cwspear/docker-local-persist-volume-plugin
-  /bin/bash
 ```
 
 ### Librerias de terceros
@@ -202,10 +103,11 @@ Se agrega el comando "cmd" para facilitar el uso del proyecto y su interacción 
                             los tests npm
 
 -sp  | --shell_project      accede al contenedor del proyecto           (docker exec -it)
--sd  | --shell_postgres     accede al contenedor de PostgreSQL          (docker exec -it)
--sn  | --shell_neo4j        accede al contenedor de Neo4j               (docker exec -it)
 
 -s   | --stop               detiene los contenedores                    (docker-compose down)
+
+-lp  | --local_persist      Para desarrollo inicia un contenedor docker (docker run local-persist)
+                            con local persistencia
 ```
 
 ### Librerias (pip requirements.txt y poetry)
@@ -263,9 +165,9 @@ nmap 0.0.0.0 -p 23,24,25,80,5432,5555,7473,7474,7687,8001 | grep -i tcp
 ```
 
 Cada contenedor contiene una llave para el Vault de ansible, debe ingresar a cada uno y revisar
-el archivo .key dentro de la carpeta ansible si desea cambiar las contraseñas.
+el archivo crea un archivo .key dentro de la carpeta ansible, si desea cambiar las contraseñas desencrypta los valores y vuelve a encryptar con una nueva llave.
 En la configuración de ansible puede buscar la palabra ".key" y comentar la linea para que no busque
-la contraseña en un archivo y así asignar una contraseña nueva y guardarla en algún lugar seguro.
+la contraseña en un archivo y así asignar una contraseña nueva y guardarla en algún lugar seguro. Esto puede tener efectos en la construcción del contenedor.
 
 
 ### Usar y obtener actualziaciones desde la plantilla.
@@ -346,3 +248,26 @@ revisa el archivo en ansible template o dentro del projecto o en /usr/local/bin/
 ```sh
 runsupervisor
 ```
+
+
+# Despliegue en producción
+
+* URL: `www.saengate.com`
+
+Usa AWS para su despliegue.
+
+* Región: EE.UU. Este (Norte de Virginia) us-east-1
+
+TODO: Cambiar a `Amazon Aurora Serverless: PostgreSQL v10.12`
+## Configuración de la base de datos (Modo prueba)
+
+Tomar en consideración para reducir al minimo posibles costos:
+1. Elegir la capa gratuita.
+2. Elegir en todas las secciones el recurso más bajo.
+3. No usar backups.
+
+* `DB instance identifier`: wagtail
+* `Instance`: db.t2.micro
+
+* Debe crearse una nueva VPC y configurar el puerto de acceso junto con la ruta de tablas.
+TODO: documentar

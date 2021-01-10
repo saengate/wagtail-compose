@@ -10,6 +10,6 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Feature
 - [Descripción.](https://github.com/saengate/djfullapp/pull/#)
 
-## [0.1.0] - 2020-07-20
+## [1.0.0] - 2021-01-07
 ### Feature
-- [Agrega como `postgres` y `django` submodulos al proyecto wagtail compose.](https://github.com/saengate/djfullapp/pull/#)
+- [Primera versión del blog saengate con wagtail en AWS.](https://github.com/saengate/wagtail-compose/pull/1)

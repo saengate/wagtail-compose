@@ -106,11 +106,10 @@ venv.bak/
 *.csv
 /.gitignore~
 /README.md~
-.vscode/
 .idea/
 .DS_Store
 
-data/
+database/
 django/poetry.lock
 
 local-persist.json
